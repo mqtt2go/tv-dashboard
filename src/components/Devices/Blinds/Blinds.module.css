@@ -1,0 +1,152 @@
+
+.Item{
+    width: 500px;
+    height: 110px;
+    background-color: #f2f2f2;
+    box-shadow: 1px 2px 6px rgba(0,0,0,0.5);
+    cursor: pointer;
+    transition: transform .3s ease;
+    /*margin: 10px 14px;*/
+    margin: 10px 0;
+}
+
+.Item:focus, .StateBtn:focus{
+    box-sizing: border-box;
+    outline: none;
+    border: 4px solid #DA2A1D;
+    transform: scale(1.05);
+    transition: transform .4s ease;
+}
+
+.Active{
+    box-sizing: border-box;
+    outline: none;
+    border: 4px solid #DA2A1D;
+    transform: scale(1.05);
+}
+
+.Name{
+    font-size: 24px;
+    color: #1a1a1a;
+    margin-left: 10px;
+}
+
+.Wrap{
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.Icon{
+    margin: 0 25px;
+}
+
+.Btn .Icon {
+    margin-right: 0;
+}
+
+.State{
+    margin-left: auto;
+    width: 94px;
+    height: 81px;
+    text-align: center;
+    border-left: solid 1px #888888;
+}
+
+.State p{
+    font-size: 24px;
+}
+
+.BtnWrap{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.Btn{
+    position: relative;
+    width: 200px;
+    height: 152px;
+    background-color: #f2f2f2;
+    margin: 20px 20px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    transition: transform .3s ease;
+    box-shadow: 1px 2px 6px rgba(0,0,0,0.5);
+    align-self: center;
+}
+
+
+.Btn p, .Level p{
+    height: 26px;
+    font-size: 24px;
+    width: 100%;
+    text-align: center;
+}
+
+.BlindsMenu{
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    left: 0;
+    top: 0;
+    background-color: #e0e0e0;
+    text-align: center;
+    transition: transform .3s ease;
+}
+
+.Level{
+    height: 152px;
+    width: 152px;
+    background-color: #f2f2f2;
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    transition: transform .3s ease;
+    box-shadow: 1px 2px 6px rgba(0,0,0,0.5);
+}
+
+.Btn:focus, .Level:focus{
+    box-sizing: border-box;
+    outline: none;
+    border: 4px solid #DA2A1D;
+    transform: scale(1.05);
+    transition: transform .4s ease;
+}
+
+.Title{
+    font-size: 48px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin: 50px;
+    margin-top: 100px;
+}
+
+.LdsRing {
+    display: inline-block;
+}
+
+.LdsRing:after {
+    content: " ";
+    display: block;
+    width: 48px;
+    height: 48px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #666666;
+    border-color: #666666 transparent #666666 transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}
+  

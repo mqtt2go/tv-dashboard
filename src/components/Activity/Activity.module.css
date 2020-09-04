@@ -1,0 +1,89 @@
+
+
+.Time {
+    color: #DA2A1D;
+    margin: 30px 20px 5px 20px;
+}
+
+.Message{
+    color: #1a1a1a;
+    margin: 5px 20px 15px 20px;
+}
+
+.Activity {
+    background-color: #f2f2f2;
+    width: 500px;
+    box-shadow: 1px 2px 6px rgba(0,0,0,0.5);
+    font-size: 24px;
+    line-height: 36px;
+    margin: 10px;
+    transition: transform .3s ease;
+}
+
+.Activity:focus{
+    box-sizing: border-box;
+    outline: none;
+    border: 4px solid #DA2A1D;
+    transform: scale(1.01);
+    transition: transform .2s ease;
+}
+
+.Row {
+    margin: 4px 20px;
+    border-bottom: 1px solid #979797;
+}
+
+.Row:focus{
+    box-sizing: border-box;
+    outline: none;
+    border: 4px solid #DA2A1D;
+    transform: scale(1.02);
+    transition: transform .3s ease;
+}
+
+.Row:last-child{
+    border: none;
+}
+
+.ActivityMenu{
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    left: 0;
+    top: 0;
+    background-color: #e0e0e0;
+    text-align: center;
+    transition: transform .3s ease;
+}
+
+.Title{
+    color: #1a1a1a;
+    margin: 50px;
+    font-size: 48px;
+    margin-top: 120px;
+    font-weight: 500;
+}
+
+.ActivityPanel{
+    margin: auto;
+    background-color: #f2f2f2;
+    font-size: 24px;
+    text-align: left;
+    box-shadow: 1px 2px 6px rgba(0,0,0,0.5);
+    width: 70%;
+    outline: none;
+    padding: 30px;
+    max-height: 70%;
+    display: flex;
+}
+
+.Loader p {
+    text-align: center;
+    font-size: 2rem;
+    color: #999999;
+}
+
+.Frame{
+    overflow: hidden;
+    width: 100%;
+}

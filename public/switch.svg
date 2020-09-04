@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="55px" height="55px" viewBox="0 0 55 55" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <desc>Created with Lunacy</desc>
+  <g id="icons8-shutdown">
+    <path d="M27.5 0C12.3122 3.66374e-15 1.22125e-15 12.3122 0 27.5C-1.22125e-15 42.6878 12.3122 55 27.5 55C42.6878 55 55 42.6878 55 27.5C55 12.3122 42.6878 6.10623e-15 27.5 0Z" id="Path" fill="#32C24D" stroke="none" />
+    <g id="Group" transform="translate(14.5 15)">
+      <path d="M22.04 0.001L19.405 3.013C21.008 4.638 22 6.869 22 9.332C22 14.303 17.971 18.332 13 18.332C8.029 18.332 4 14.303 4 9.332C4 6.868 4.992 4.637 6.596 3.012L3.961 0C1.522 2.364 0 5.668 0 9.332C0 16.512 5.82 22.332 13 22.332C20.18 22.332 26 16.512 26 9.332C26 5.668 24.479 2.364 22.04 0.001Z" transform="translate(0 3.668)" id="Path" fill="#F2F2F2" stroke="none" />
+      <path d="M0 0L4 0L4 12L0 12L0 0Z" transform="translate(11 0)" id="Path" fill="#F2F2F2" stroke="none" />
+    </g>
+  </g>
+</svg>

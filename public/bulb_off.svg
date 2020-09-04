@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="56px" height="60px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g id="A1_Guru_icon" transform="matrix(1,0,0,1,12,12)">
+        <g opacity="0.6">
+            <path id="Icons_1_" d="M15.974,0C7.152,0 0,7.152 0,15.974L0,17.97L7.987,35.94L23.96,35.94L31.947,17.97L31.947,15.974C31.947,7.151 24.796,0 15.974,0ZM21.365,31.947L27.954,17.132L27.954,15.974C27.954,9.357 22.59,3.993 15.974,3.993C9.357,3.993 3.993,9.357 3.993,15.974L3.993,17.132L10.583,31.947L21.365,31.947ZM9.984,41.931L7.987,39.934L7.987,37.937L23.96,37.937L23.96,39.934L21.964,41.931L9.984,41.931ZM9.984,45.924L11.98,47.92L19.967,47.92L21.964,45.924L21.964,43.927L9.984,43.927L9.984,45.924Z" style="fill:rgb(26,26,26);"/>
+        </g>
+    </g>
+</svg>

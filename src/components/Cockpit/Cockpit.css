@@ -1,0 +1,27 @@
+
+.Cockpit {
+    color: #737373;
+    font-size: 24px;
+    height: 100px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #E0E0E0;
+    z-index: 2;
+}
+
+.Navbar{
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+}
+
+.Cockpit p {
+    margin-top: 58px;
+    margin-bottom: 20px;
+    height: 32px;
+}
+
+
+
