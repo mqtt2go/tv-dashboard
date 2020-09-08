@@ -69,3 +69,21 @@
     margin-top: auto;
     margin-bottom: 0;
 }
+
+.Technology{
+    font-size: 14px;
+    color: #666666;
+    font-style: italic;
+    margin: 0;
+    line-height: 24px;
+}
+
+.MidWrap{
+    display: flex;
+    flex-direction: column;
+}
+
+.NameWrap{
+    display: flex;
+    align-items: flex-end;
+}

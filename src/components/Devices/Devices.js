@@ -89,33 +89,24 @@ class Devices extends Component {
         } 
     }
 
+    focusLast(){
+        if (this.lastSelected) {
+            this.lastSelected.focus();
+            this.lastSelected = null;
+        }
+    }
+
     hideMenuHandler = (event, id, room) => {
         const keys = [8, 27, 403, 461];
         if (keys.includes(event.keyCode)){
-            const modal = document.querySelector('.show');
+        const modal = document.querySelector('.show');
             modal.classList.remove('show');
             modal.classList.add('hide');
             this.props.menuChange(false, true);
             this.selectedItem = null;
-            if (this.lastSelected) {
-                this.lastSelected.focus();
-                this.lastSelected = null;
-            }
+            this.focusLast();
         }
     }
-
-    /*hideCameraHandler = (event) => {
-        if (event.keyCode === 8 || event.keyCode === 27 || event.keyCode === 403){
-            const modal = document.querySelector('.show');
-            modal.classList.remove('show');
-            modal.classList.add('hide');
-            this.selectedItem = null;
-            if (this.lastSelected) {
-                this.lastSelected.focus();
-                this.lastSelected = null;
-            }
-        }
-    }*/
 
     switchHandler = (event, id, room, item) => {
         this.lastSelected = event.target;
@@ -126,37 +117,50 @@ class Devices extends Component {
 
     stateHandler = (id, room, state) => {
         //console.log(id, room, state);
-        this.selectedItem.state = state;
-        this.props.setChange(id, room, this.selectedItem);
+        const item = this.selectedItem;
+        item.state = state;
+        this.selectedItem = null; 
+        this.props.setChange(id, room, item);
         this.props.mqttChange(id, 'set', 'switch', state);
+        this.focusLast();
     }
 
     blindsHandler = (id, room, level) => {
         //console.log(id, room, level);
         if (this.selectedItem.position !== level) this.selectedItem.moving = true;
-        this.selectedItem.position = level;
-        this.props.setChange(id, room, this.selectedItem);
+        const item = this.selectedItem;
+        item.position = level;
+        this.selectedItem = null;
+        this.props.setChange(id, room, item);
         this.props.mqttChange(id, 'set', 'position', level);
+        this.focusLast();
     }
 
     colorHandler = (id, room, color) => {
-        console.log(id, room, color);
+        //console.log(id, room, color);
         const aRgbHex = color.match(/.{1,2}/g);
         const rgb_color = {
             r: parseInt(aRgbHex[0], 16),
             g: parseInt(aRgbHex[1], 16),
             b: parseInt(aRgbHex[2], 16)
         };
-        this.selectedItem.color = rgb_color;
-        if (this.selectedItem.state === 'off') this.selectedItem.state = 'on';
-        this.props.setChange(id, room, this.selectedItem);
+        const item = this.selectedItem;
+        item.color = rgb_color;
+        this.selectedItem = null;
+        if (item.state === 'off') item.state = 'on';
+        this.props.setChange(id, room, item);
         this.props.mqttChange(id, 'color', 'color', rgb_color);
+        this.focusLast();
     }
 
     brightnessHandler = (id, room, brightness) => {
-        this.selectedItem.brightness = brightness;
-        if (this.selectedItem.state === 'off') this.selectedItem.state = 'on';
+        const item = this.selectedItem;
+        item.brightness = brightness;
+        this.selectedItem = null;
+        if (item.state === 'off') item.state = 'on';
+        this.props.setChange(id, room, item);
         this.props.mqttChange(id, 'brightness', 'brightness', brightness);
+        this.focusLast();
     }
 
     focused = (e) => {

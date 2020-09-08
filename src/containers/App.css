@@ -254,3 +254,9 @@ h3 {
     opacity: 0; 
   }
 }
+
+.Info-Message{
+  color: #737373;
+  font-size: 20px;
+  margin: 20px;
+}

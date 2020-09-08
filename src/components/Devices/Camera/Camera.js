@@ -32,7 +32,7 @@ const camera = (props) => {
         if (props.menuVisible){
             return(
                 <Control element={"Modal-Menu"}>
-                    <div className={classes.CameraMenu + (props.showAlert ? ' show' : ' hide')} onKeyDown={(event) => props.hideMenu(event)}>
+                    <div className={classes.CameraMenu + (props.showAlert ? ' show' : ' hide')} onKeyUp={(event) => props.hideMenu(event)}>
                         <FocusableSection className={classes.MenuWrap} neighborUp='' neighborDown='' neighborLeft='' neighborRight='' sectionId='camera-stream'>
                             <Focusable className={classes.StreamWrap + ' menu-active'}>
                                     <p className={classes.Name + ' ' + classes.Shadow}>{props.item.name}</p>

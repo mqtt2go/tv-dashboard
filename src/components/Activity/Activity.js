@@ -32,7 +32,7 @@ const activity = (props) => {
         if (props.menuVisible){
             return(
                 <Control element={"Modal-Menu"}>
-                    <div className={classes.ActivityMenu + (props.showAlert || props.longActivities.length > 0 ? ' show' : ' hide')} onKeyDown={(event) => props.hideMenu(event)}>
+                    <div className={classes.ActivityMenu + (props.showAlert || props.longActivities.length > 0 ? ' show' : ' hide')} onKeyUp={(event) => props.hideMenu(event)}>
                         <h1 className={classes.Title}>Activities Log</h1>
                         <FocusableSection sectionId='activity-menu'
                                 neighborUp=''

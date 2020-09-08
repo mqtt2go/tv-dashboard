@@ -11,7 +11,7 @@ const blinds = (props) => {
         if (props.menuVisible){
             return(
                 <Control element={"Modal-Menu"}>
-                    <div className={classes.BlindsMenu + (props.showAlert ? ' show' : ' hide')} onKeyDown={(event) => props.hideMenu(event, props.item.id, props.room)}>
+                    <div className={classes.BlindsMenu + (props.showAlert ? ' show' : ' hide')} onKeyUp={(event) => props.hideMenu(event, props.item.id, props.room)}>
                         <h1 className={classes.Title}>{props.item.name}</h1>
                         <FocusableSection neighborUp='' neighborDown='' neighborLeft='' neighborRight='' className={classes.BtnWrap} sectionId='blinds-level'>
                             <Focusable className={classes.Btn + ' menu-active'} onClickEnter={() => props.levelClicked(props.item.id, props.room, 100)}>

@@ -34,7 +34,7 @@ const light = (props) => {
         }
         if (state.toLowerCase() === 'on'){
             if (level){
-                return level + ' %';
+                return Math.round(level) + ' %';
             }
             return 'On'
         }
@@ -66,7 +66,7 @@ const light = (props) => {
         if (props.menuVisible){
             return(
                     <Control element={"Modal-Menu"}>
-                        <div className={classes.LightMenu + (props.showAlert ? ' show' : ' hide')} onKeyDown={(event) => props.hideMenu(event, props.item.id, props.room)}>
+                        <div className={classes.LightMenu + (props.showAlert ? ' show' : ' hide')} onKeyUp={(event) => props.hideMenu(event, props.item.id, props.room)}>
                             <h1 className={classes.Title}>{props.item.name}</h1>
                                 <FocusableSection sectionId='buttons'
                                     neighborUp=''
@@ -111,6 +111,7 @@ const light = (props) => {
             <div className={classes.Wrap}>
                 <img className={classes.Icon} src={process.env.PUBLIC_URL + '/' + getIcon(props.item.type, props.item.state) + '.svg'} alt='icon' />
                 <p className={classes.Name}>{props.item.name}</p>
+                <p className={classes.Technology}>{props.item.technology}</p>
                 <div className={classes.State}>
                     <p>{getState(props.item.state, props.item.brightness)}</p>
                 </div>

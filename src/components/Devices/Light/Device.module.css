@@ -195,3 +195,10 @@
 .State p{
     font-size: 24px;
 }
+
+.Technology{
+    font-size: 14px;
+    color: #666666;
+    padding-top: 10px;
+    font-style: italic;
+}

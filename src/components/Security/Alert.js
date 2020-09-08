@@ -18,8 +18,8 @@ const alert = (props) => {
                                     neighborLeft=''
                                     neighborRight=''
                                     className={classes.AlertMenu + (props.showAlert ? ' show' : ' hide')}>
-                        <h1 className={classes.Title}>Security Report</h1>
-                        <Focusable className={classes.AlertPanel + ' menu-active'} onKeyDown={(event) => props.hideMenu(event)}>
+                        <h1 className={classes.Title}>Anomaly Report</h1>
+                        <Focusable className={classes.AlertPanel + ' menu-active'} onKeyUp={(event) => props.hideMenu(event)}>
                             {
                                 props.alerts.map((alert, idx) => {
                                     return(
@@ -31,6 +31,7 @@ const alert = (props) => {
                                 })
                             }
                     </Focusable>
+                    <div className={classes.InfoMessage}>An MQTT2GO compliant application for monitoring and detecting anomalies of all kinds in households with smart home services by Brno University of Technology.</div>
                     </FocusableSection>
                 </Control>
             )

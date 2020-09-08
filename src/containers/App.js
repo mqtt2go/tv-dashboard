@@ -26,9 +26,9 @@ const options = {
     clientId: makeid(8)
   };
 
-const client = mqtt.connect(`mqtt://${window.location.hostname}:59001`, options);
+//const client = mqtt.connect(`mqtt://${window.location.hostname}:59001`, options);
 
-//const client = mqtt.connect(`mqtt://192.168.42.172:9001`, options);
+const client = mqtt.connect(`mqtt://192.168.42.172:9001`, options);
 
 class App extends Component {
 
@@ -153,8 +153,6 @@ class App extends Component {
           el.src = data['value'];
         }
       }
-
-      //if (this.menuVisible  || this.alertMsg) return;
       
       if (data['type'] === 'periodic_report'){
         this.changeStateHandler(device[2], device[3], data['report']['value']);
@@ -280,6 +278,7 @@ class App extends Component {
   }
 
   commitChange = (id, room_id, new_state) => {
+    this.menuVisible = false;
     const rooms = [...this.state['rooms']];
     const roomIdx = rooms.findIndex(item => {
         return item.id === room_id;
@@ -311,13 +310,11 @@ class App extends Component {
       modal.classList.remove('show');
       modal.classList.add('hide');
       this.selectedItem = null;
-      setTimeout(() => {
-        this.switchFocusable(false, true);
-      }, 300);
+      this.switchFocusable(false, true);
       this.activities = [];
       if (this.lastSelected) {
-      this.lastSelected.focus();
-      this.lastSelected = null;
+        this.lastSelected.focus();
+        this.lastSelected = null;
       }
     }
   }
@@ -400,6 +397,7 @@ class App extends Component {
                 </div>
               </div>
             </div>
+            <div class="Info-Message">Smart Home Service powered by Home Assistant with a MQTT2GO compliant Add-on by Brno University of Technology.</div>
             <div id="Modal-Menu"></div>
             <div id="Alert-Msg"></div>
             {this.getAlert()}

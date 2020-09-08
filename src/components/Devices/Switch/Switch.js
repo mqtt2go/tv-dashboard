@@ -16,6 +16,7 @@ const swtch = (props) => {
                     src={process.env.PUBLIC_URL + '/' + (props.item.type === 'light' ? 'bulb' : 'switch') + (props.item.state.toLowerCase() === 'off' ? '_off.svg' : '.svg')}
                     alt='icon' />
                 <p className={classes.Name}>{props.item.name}</p>
+                <p className={classes.Technology}>{props.item.technology}</p>
                 <div className={classes.State}>
                     <p>{props.item.state  === 'on' ? 'On' : 'Off'}</p>
                 </div>

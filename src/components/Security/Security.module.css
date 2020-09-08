@@ -21,6 +21,16 @@
     color: #1a1a1a;
 }
 
+.InfoMessage{
+    margin: 0 auto;
+    width: 55%;
+    margin-top: 25px;
+    text-align: center;
+    color: #737373;
+    font-size: 20px;
+    line-height: 30px;
+}
+
 .Item hr {
     width: 60%;
     height: 6px;

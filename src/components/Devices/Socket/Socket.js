@@ -26,7 +26,10 @@ const socket = (props) => {
                     src={process.env.PUBLIC_URL + '/' + (props.item.type === 'light' ? 'bulb' : 'switch') + (props.item.state.toLowerCase() === 'off' ? '_off.svg' : '.svg')}
                     alt='icon' />
             <div className={classes.MidWrap}>
-                <p className={classes.Name}>{props.item.name}</p>
+                <div className={classes.NameWrap}>
+                    <p className={classes.Name}>{props.item.name}</p>
+                    <p className={classes.Technology}>{props.item.technology}</p>
+                </div>
                 <div className={classes.Values}>
                     {getVariable(props.item.voltage, 'Voltage (V)')}
                     {getVariable(props.item.current, 'Current (A)', false)}

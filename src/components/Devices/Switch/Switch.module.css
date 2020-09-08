@@ -53,3 +53,9 @@
     transition: opacity .2s;
 }
 
+.Technology{
+    font-size: 14px;
+    color: #666666;
+    padding-top: 10px;
+    font-style: italic;
+}
