@@ -1,0 +1,18 @@
+import React from 'react';
+import { Focusable } from 'react-js-spatial-navigation';
+import './Tabs.css';
+
+const tabs = (props) => {
+    return(
+        props.homes.map((home, idx) => {
+            return(
+              <Focusable className={props.homeId === idx ? "Tab Active" : "Tab"} key={idx}
+                         onClickEnter={() => props.homeHandler(idx)}>
+                <p>{home.name}</p>
+              </Focusable>
+            )
+          })
+    )
+}
+
+export default tabs;

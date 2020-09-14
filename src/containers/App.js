@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Cockpit from '../components/Cockpit/Cockpit';
+import Tabs from '../components/Tabs/Tabs';
 import Scenes from '../components/Scenes/Scenes';
 import Security from '../components/Security/Security';
 import Alert from '../components/Security/Alert';
@@ -26,13 +27,14 @@ const options = {
     clientId: makeid(8)
   };
 
-//const client = mqtt.connect(`mqtt://${window.location.hostname}:59001`, options);
+const client = mqtt.connect(`mqtt://${window.location.hostname}:59001`, options);
 
-const client = mqtt.connect(`mqtt://192.168.42.172:9001`, options);
+//const client = mqtt.connect(`mqtt://192.168.42.172:9001`, options);
 
 class App extends Component {
-
-  state = {scenes: [], security: [], alert: [], activities: [], rooms: []}
+  homes = [{name: 'Brno Home', prefix: 'BRQ/BUT'}, {name: 'Vienna Home', prefix: 'VIE/A1'}];
+  home_id = 0;
+  state = {scenes: [], security: [], alert: [], activities: [], rooms: []};
   activities = [];
 
   menuVisible = false;
@@ -123,20 +125,20 @@ class App extends Component {
       const data = JSON.parse(message);
       //console.log(topic, data);
 
-      if (topic === 'BRQ/BUT/devices/out'){
+      if (topic === `${this.homes[this.home_id].prefix}/devices/out`){
         client.unsubscribe(topic);
         this.setState(data['value']);
-        client.publish('BRQ/BUT/in', JSON.stringify({priority_level: 1, type: 'query_activities', timestamp: new Date().getTime()}));
+        client.publish(`${this.homes[this.home_id].prefix}/in`, JSON.stringify({priority_level: 1, type: 'query_activities', timestamp: new Date().getTime()}));
         return;
       }
 
-      if (topic === 'BRQ/BUT/out'){
+      if (topic === `${this.homes[this.home_id].prefix}/out`){
         client.unsubscribe(topic);
         this.activities = data['value'];
         this.forceUpdate();
       }
 
-      if (topic === 'BRQ/BUT/activities/out'){
+      if (topic === `${this.homes[this.home_id].prefix}/activities/out`){
         client.unsubscribe(topic);
         this.setState({'activities': data['value']});
         return;
@@ -167,12 +169,12 @@ class App extends Component {
   }
 
   componentDidMount() {
-    client.subscribe('BRQ/BUT/devices/out');
-    client.subscribe('BRQ/BUT/activities/out');
-    client.publish('BRQ/BUT/in', JSON.stringify({priority_level: 1, type: 'query_gui_dev', timestamp: new Date().getTime()}));
+    client.subscribe(`${this.homes[this.home_id].prefix}/devices/out`);
+    client.subscribe(`${this.homes[this.home_id].prefix}/activities/out`);
+    client.publish(`${this.homes[this.home_id].prefix}/in`, JSON.stringify({priority_level: 1, type: 'query_gui_dev', timestamp: new Date().getTime()}));
 
-    client.subscribe('BRQ/BUT/+/+/out');
-    client.subscribe('BRQ/BUT/events/in');
+    client.subscribe(`${this.homes[this.home_id].prefix}/+/+/out`);
+    client.subscribe(`${this.homes[this.home_id].prefix}/events/in`);
     client.on('message', (topic, message) => this.parseMqtt(topic, message.toString()));
     setInterval(() => this.updateCameraImage(), 15000);
   }
@@ -190,12 +192,12 @@ class App extends Component {
 
     if (id.startsWith('scn')){
         type = 'scenes';
-        client.publish('BRQ/BUT/in', JSON.stringify({priority_level: 2, type: 'set', timestamp: new Date().getTime(), value: {scene_id: id}}));
+        client.publish(`${this.homes[this.home_id].prefix}/in`, JSON.stringify({priority_level: 2, type: 'set', timestamp: new Date().getTime(), value: {scene_id: id}}));
     }
 
     if (id.startsWith('sec')){
       type = 'security';
-      client.publish('BRQ/BUT/security/in', JSON.stringify({priority_level: 2, type: 'arm', timestamp: new Date().getTime(), value: id === 'sec_1' ? true : false}));
+      client.publish(`${this.homes[this.home_id].prefix}/security/in`, JSON.stringify({priority_level: 2, type: 'arm', timestamp: new Date().getTime(), value: id === 'sec_1' ? true : false}));
     }
 
     const items = [...this.state[type]];      
@@ -271,7 +273,7 @@ class App extends Component {
   }
 
   sendMQTTChange = (id, command_type, variable, data) => {
-    const topic = `BRQ/BUT/${id}/${variable}/in`;
+    const topic = `${this.homes[this.home_id].prefix}/${id}/${variable}/in`;
     const message = {type: command_type, timestamp: new Date().valueOf(), value: data};
     client.publish(topic, JSON.stringify(message));
     //console.log(topic, JSON.stringify(message));
@@ -325,8 +327,8 @@ class App extends Component {
     this.selectedItem = item;
     this.switchFocusable(true);
     if (this.selectedItem === 'activity'){
-      client.publish('BRQ/BUT/in', JSON.stringify({type: 'query_log', timestamp: +new Date()}));
-      client.subscribe('BRQ/BUT/out');
+      client.publish(`${this.homes[this.home_id].prefix}/in`, JSON.stringify({type: 'query_log', timestamp: +new Date()}));
+      client.subscribe(`${this.homes[this.home_id].prefix}/out`);
     }
     setTimeout(() => {
       const modal = document.querySelector('.hide');
@@ -339,14 +341,34 @@ class App extends Component {
       }, 50);
   }
 
-  
-  
+  switchHomeHandler = (home) => {
+    client.unsubscribe(`${this.homes[this.home_id].prefix}/devices/out`);
+    client.unsubscribe(`${this.homes[this.home_id].prefix}/activities/out`);
+    client.unsubscribe(`${this.homes[this.home_id].prefix}/+/+/out`);
+    client.unsubscribe(`${this.homes[this.home_id].prefix}/events/in`);
+    this.home_id = home;
+    if (home === 1) {
+      this.activities = [{}];
+      this.setState({"scenes":[{"id":"scn_1","name":"Lights OFF","icon":"moon","active":false},{"id":"scn_2","name":"Lights ON","icon":"sun","active":false},{"id":"scn_3","name":"Movie time","icon":"movie","active":false},{"id":"scn_4","name":"Reading","icon":"glasses","active":false}],"alert":[{"event_name":"consumption_alert","message":"Power consumption within the limit.","status":"ok","timestamp":0},{"event_name":"movement_alert","message":"No movement detected.","status":"ok","timestamp":0},{"event_name":"humidity_alert","message":"Humidity within the limit.","status":"ok","timestamp":0},{"event_name":"temperature_alert","message":"Temperature within the limit.","status":"ok","timestamp":0},{"event_name":"lights_alert","message":"All lights in regular operation.","status":"ok","timestamp":0}],"security":[{"id":"sec_1","type":"button","name":"Arm","icon":"arm","active":false},{"id":"sec_2","type":"button","name":"Disarmed","icon":"disarm","active":true}],"activities":[{"timestamp": new Date().getTime() / 1000 - 125,"message":"Krystof is away"},{"timestamp": new Date().getTime() / 1000 - 915,"message":"Air conditioning turned On"},{"timestamp": new Date().getTime() / 1000 - 3652,"message":"Vacuum cleaner turned Off"}],"rooms":[{"id":"room_0","devices":[{"id":"camera1","name":"Living Room","type":"camera","image":"http://147.229.69.68:58123/local/images/livingroom.png","events":{"message":"No motion detected","timestamp":0}},{"id":"sb1","name":"RGB Lamp","type":"light_rgb","color":0,"brightness":0,"state":"off"},{"id":"sh25","name":"Window Blinds","type":"blinds","position":50},{"id":"plugs","name":"Air Conditioning","type":"socket","voltage":235,"current":0.42,"consumption":96.5,"state":"on"},{"id":"th16","name":"Projector","type":"switch","temperature":26.0,"humidity":54.7,"state":"off"}]},{"id":"room_1","devices":[{"id":"camera2","name":"Garden","type":"camera","image":"http://147.229.69.68:58123/local/images/garden.png","events":{"message":"No motion detected","timestamp":0}},{"id":"bulbs_non","name":"Foountain Light*","type":"light_rgb","technology":"Shelly","color":0,"brightness":60,"state":"on"},{"id":"ht_non","name":"Ambient Sensor*","type":"sensor","technology":"Shelly","temperature":24.0,"humidity":55.5},{"id":"fibaro_socket","name":"Pump*","type":"switch","technology":"Zwave","state":"off"}]},{"id":"room_None","devices":[{"id":"camera3","name":"Entrance","type":"camera","image":"http://147.229.69.68:58123/local/images/entrance.png","events":{"message":"No motion detected","timestamp":0}},{"id":"zipato_bulb_2_level","name":"Chandelier*","type":"light_level","technology":"ZWave","brightness":20,"state":"on"},{"id":"th16_2","name":"Vacuum cleaner","type":"switch","temperature":26.3,"humidity":52.1,"state":"off"}]}]});
+    } else {
+      client.subscribe(`${this.homes[this.home_id].prefix}/devices/out`);
+      client.subscribe(`${this.homes[this.home_id].prefix}/activities/out`);
+      client.publish(`${this.homes[this.home_id].prefix}/in`, JSON.stringify({priority_level: 1, type: 'query_gui_dev', timestamp: new Date().getTime()}));
+      client.subscribe(`${this.homes[this.home_id].prefix}/+/+/out`);
+      client.subscribe(`${this.homes[this.home_id].prefix}/events/in`);
+      client.on('message', (topic, message) => this.parseMqtt(topic, message.toString()));
+    }
+  }
+
   getContent(){
     if (this.state.rooms.length > 0){
     return(
       <SpatialNavigation className="App">
           <Cockpit homeName="A1 Smart Home"/>
-          <div className="Overview Row">
+          <FocusableSection className="Overview Tabs" sectionId='tabs'>
+            <Tabs homes={this.homes} homeId={this.home_id} homeHandler={this.switchHomeHandler}/>
+          </FocusableSection>
+          <div className="Row">
               <div className="Scenes">
                 <h3>Presets</h3>
                 <FocusableSection className="Wrap" sectionId='scenes'>
@@ -397,7 +419,7 @@ class App extends Component {
                 </div>
               </div>
             </div>
-            <div class="Info-Message">Smart Home Service powered by Home Assistant with a MQTT2GO compliant Add-on by Brno University of Technology.</div>
+            <div className="Info-Message">Smart Home Service powered by Home Assistant with a MQTT2GO compliant Add-on by Brno University of Technology.</div>
             <div id="Modal-Menu"></div>
             <div id="Alert-Msg"></div>
             {this.getAlert()}
