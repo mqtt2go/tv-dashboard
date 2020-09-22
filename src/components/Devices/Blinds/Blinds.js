@@ -13,7 +13,7 @@ const blinds = (props) => {
                 <Control element={"Modal-Menu"}>
                     <div className={classes.BlindsMenu + (props.showAlert ? ' show' : ' hide')} onKeyUp={(event) => props.hideMenu(event, props.item.id, props.room)}>
                         <h1 className={classes.Title}>{props.item.name}</h1>
-                        <FocusableSection neighborUp='' neighborDown='' neighborLeft='' neighborRight='' className={classes.BtnWrap} sectionId='blinds-level'>
+                        <FocusableSection neighborUp='' neighborDown='' neighborLeft='@back-btn' neighborRight='' className={classes.BtnWrap} sectionId='blinds-level'>
                             <Focusable className={classes.Btn + ' menu-active'} onClickEnter={() => props.levelClicked(props.item.id, props.room, 100)}>
                                 <img className={classes.Icon} src={process.env.PUBLIC_URL + '/blinds_open.svg'} alt='icon'/>
                                 <p>Up</p>
@@ -28,6 +28,15 @@ const blinds = (props) => {
                             <Focusable className={classes.Btn} onClickEnter={() => props.levelClicked(props.item.id, props.room, 0)}>
                                 <img className={classes.Icon} src={process.env.PUBLIC_URL + '/blinds_close.svg'} alt='icon'/>
                                 <p>Down</p>
+                            </Focusable>
+                        </FocusableSection>
+                        <FocusableSection sectionId='back-btn'
+                            neighborUp=''
+                            neighborDown=''
+                            neighborLeft=''
+                            neighborRight=''>
+                            <Focusable className={classes.Back} onKeyUp={(event) => props.hideMenu(event, false)}>
+                                <img alt="back" src={process.env.PUBLIC_URL + '/back.svg'}/>
                             </Focusable>
                         </FocusableSection>
                     </div>

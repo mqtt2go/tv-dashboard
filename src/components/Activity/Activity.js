@@ -37,21 +37,30 @@ const activity = (props) => {
                         <FocusableSection sectionId='activity-menu'
                                 neighborUp=''
                                 neighborDown=''
-                                neighborLeft=''
+                                neighborLeft='@back-btn'
                                 neighborRight=''
                                 className={classes.ActivityPanel}>
                             <div className={classes.Frame}>
-                            {data.map((activity, idx) => {
-                                return(
-                                    <Focusable className={classes.Row + (idx === 0 ? ' menu-active' : '')} key={idx}>
-                                        <p className={classes.Time}>{getTimeValue(activity.timestamp)}</p>
-                                        <p className={classes.Message} >{activity.message}</p>
-                                    </Focusable>
-                                )
-                            })
-                            }
-                            {getLoading()}
+                                {data.map((activity, idx) => {
+                                    return(
+                                        <Focusable className={classes.Row + (idx === 0 ? ' menu-active' : '')} key={idx}>
+                                            <p className={classes.Time}>{getTimeValue(activity.timestamp)}</p>
+                                            <p className={classes.Message} >{activity.message}</p>
+                                        </Focusable>
+                                    )
+                                })
+                                }
+                                {getLoading()}
                             </div>
+                        </FocusableSection>
+                        <FocusableSection sectionId='back-btn'
+                            neighborUp=''
+                            neighborDown=''
+                            neighborLeft=''
+                            neighborRight=''>
+                            <Focusable className={classes.Back} onKeyUp={(event) => props.hideMenu(event, false)}>
+                                <img alt="back" src={process.env.PUBLIC_URL + '/back.svg'}/>
+                            </Focusable>
                         </FocusableSection>
                     </div>
                 </Control>

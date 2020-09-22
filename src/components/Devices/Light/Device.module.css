@@ -202,3 +202,12 @@
     padding-top: 10px;
     font-style: italic;
 }
+
+.Back{
+    height: 64px;
+    width: 60px;
+    position: absolute;
+    left: 100px;
+    top: 265px;
+    outline: none;
+}

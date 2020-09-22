@@ -12,27 +12,37 @@ const alert = (props) => {
         if (props.menuVisible){
             return(
                 <Control element={"Modal-Menu"}>
-                    <FocusableSection sectionId='alert-menu'
-                                    neighborUp=''
-                                    neighborDown=''
-                                    neighborLeft=''
-                                    neighborRight=''
-                                    className={classes.AlertMenu + (props.showAlert ? ' show' : ' hide')}>
+                    <div className={classes.AlertMenu + (props.showAlert ? ' show' : ' hide')} onKeyUp={(event) => props.hideMenu(event)}>
                         <h1 className={classes.Title}>Anomaly Report</h1>
-                        <Focusable className={classes.AlertPanel + ' menu-active'} onKeyUp={(event) => props.hideMenu(event)}>
-                            {
-                                props.alerts.map((alert, idx) => {
-                                    return(
-                                        <div className={classes.AlertRow} key={idx}>
-                                            <img src={process.env.PUBLIC_URL + '/' + (alert.status === 'ok' ? 'all_ok.svg' : 'error.svg')} alt='alert icon'/>
-                                            <p>{alert.message}</p>
-                                        </div>
-                                    )
-                                })
-                            }
-                    </Focusable>
-                    <div className={classes.InfoMessage}>An MQTT2GO compliant application for monitoring and detecting anomalies of all kinds in households with smart home services by Brno University of Technology.</div>
-                    </FocusableSection>
+                        <FocusableSection sectionId='alert-menu'
+                                        neighborUp=''
+                                        neighborDown=''
+                                        neighborLeft='@back-btn'
+                                        neighborRight=''>
+                            <Focusable className={classes.AlertPanel + ' menu-active'}>
+                                {
+                                    props.alerts.map((alert, idx) => {
+                                        return(
+                                            <div className={classes.AlertRow} key={idx}>
+                                                <img src={process.env.PUBLIC_URL + '/' + (alert.status === 'ok' ? 'all_ok.svg' : 'error.svg')} alt='alert icon'/>
+                                                <p>{alert.message}</p>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </Focusable>
+                            <div className={classes.InfoMessage}>An MQTT2GO compliant application for monitoring and detecting anomalies of all kinds in households with smart home services by Brno University of Technology.</div>
+                        </FocusableSection>
+                        <FocusableSection sectionId='back-btn'
+                            neighborUp=''
+                            neighborDown=''
+                            neighborLeft=''
+                            neighborRight=''>
+                            <Focusable className={classes.Back} onKeyUp={(event) => props.hideMenu(event, false)}>
+                                <img alt="back" src={process.env.PUBLIC_URL + '/back.svg'}/>
+                            </Focusable>
+                        </FocusableSection>
+                    </div>
                 </Control>
             )
         }

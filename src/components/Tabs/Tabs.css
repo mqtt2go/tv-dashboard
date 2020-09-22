@@ -17,6 +17,8 @@
     outline: none;
     transform: scale(1.05);
     transition: transform .3s ease;
+    background-color: #DA2A1D;
+    color: white;
   }
   
   .Tabs .Active{

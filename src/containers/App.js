@@ -27,12 +27,15 @@ const options = {
     clientId: makeid(8)
   };
 
-const client = mqtt.connect(`mqtt://${window.location.hostname}:59001`, options);
-
+//const client = mqtt.connect(`mqtt://${window.location.hostname}:59001`, options);
+const client = mqtt.connect('mqtt://147.229.69.68:59001', options);
 //const client = mqtt.connect(`mqtt://192.168.42.172:9001`, options);
 
 class App extends Component {
-  homes = [{name: 'Brno Home', prefix: 'BRQ/BUT'}, {name: 'Vienna Home', prefix: 'VIE/A1'}];
+  //homes = [{name: 'Brno Home', prefix: 'BRQ/BUT', info: 'Smart Home Service powered by <strong>Home Assistant</strong> with a <strong>MQTT2GO</strong> compliant Add-on by <strong>Brno University of Technology</strong>.', system: 'TurrisOS 5.0.3', model: 'Turris Omnia'},
+  //         {name: 'Vienna Home', prefix: 'VIE/A1', info: 'Any Smart Home Service, e.g., Powered by <strong>Perenio</strong>, <strong>Tuya</strong>, or <strong>Vivalabs</strong> with an <strong>MQTT2GO</strong> compliant AddOn can be connected to the <strong>Xplore TV</strong> dashboard!', system: 'TurrisOS 5.0.3', model: 'Turris Omnia'}];
+  homes = [{name: 'Brno Home', prefix: 'BRQ/BUT', info: 'Smart Home Service powered by <strong>Home Assistant</strong> with a <strong>MQTT2GO</strong> compliant Add-on by <strong>Brno University of Technology</strong>.', system: 'PEJIR 7.1.3-CB-but-A1', model: 'PEJIR01_AABc'},
+           {name: 'Vienna Home', prefix: 'VIE/A1', info: 'Any Smart Home Service, e.g., Powered by <strong>Perenio</strong>, <strong>Tuya</strong>, or <strong>Vivalabs</strong> with an <strong>MQTT2GO</strong> compliant AddOn can be connected to the <strong>Xplore TV</strong> dashboard!', system: 'PEJIR 7.1.3-CB-but-A1', model: 'PEJIR01_AABc'}];
   home_id = 0;
   state = {scenes: [], security: [], alert: [], activities: [], rooms: []};
   activities = [];
@@ -40,6 +43,7 @@ class App extends Component {
   menuVisible = false;
   selectedItem = null;
   alertMsg = null;
+  update = true;
   lastSelected = null;
 
   componentDidUpdate(){
@@ -79,7 +83,7 @@ class App extends Component {
     if (idx === -1) return;
     alerts[idx] = value;
     alerts[idx]['timestamp'] = +new Date();
-    if (value['status'] !== 'ok') this.alertMsg = value['message'];
+    if (value['status'] === 'alert') this.alertMsg = value['message'];
     this.setState({'alert': alerts});
   }
 
@@ -180,7 +184,10 @@ class App extends Component {
   }
 
   shouldComponentUpdate(){
-    if (this.menuVisible === true) {
+    if (this.menuVisible === true && this.alertMsg){
+      return true;
+    }
+    if (this.menuVisible === true || this.update === false) {
       return false;
     }
     return true;
@@ -238,35 +245,41 @@ class App extends Component {
 
   hideAlert(){
     this.alertMsg = null;
+    this.update = true;
     const modal = document.querySelector('.show-alert');
     modal.classList.remove('show-alert');
     const el = document.querySelector('.menu-active');
     if (el){
       el.focus();
+    } else{
+      this.lastSelected.focus();
     }
+    this.forceUpdate();
   }
+
+  
 
   getAlert(){
     if(this.alertMsg){
       setTimeout(() => {
         const modal = document.querySelector('.Alert');
         modal.classList.add('show-alert');
+        this.update = false;
       }, 50);
       return(
         <Control element={"Alert-Msg"}>
-          <div className="Alert hide-alert">
+          <FocusableSection sectionId="alert-modal" className={"Alert hide-alert"}
+              neighborUp=''
+              neighborDown=''
+              neighborLeft=''
+              neighborRight=''>
             <img className="Warning-Icon" src={process.env.PUBLIC_URL + '/warning.svg'} alt='warning'></img>
             <div className="Alert-Wrap">
               <p className="Alert-Title">Alert!</p>
               <div className="Alert-Msg">{this.alertMsg}</div>
-              <Focusable className="Alert-Btn alert-active"
-                  onClickEnter={(event) => this.hideAlert()}
-                  neighborUp=''
-                  neighborDown=''
-                  neighborLeft=''
-                  neighborRight=''>Close</Focusable>
+              <Focusable className="Alert-Btn alert-active" onClickEnter={(event) => this.hideAlert()}>Close</Focusable>
             </div>
-          </div>
+          </FocusableSection>
         </Control>
       )
     }
@@ -302,12 +315,13 @@ class App extends Component {
   }
 
   focused = (e) => {
+    this.lastSelected = e.target;
     e.target.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'center'});
   }
 
-  hideMenuHandler = (event) => {
+  hideMenuHandler = (event, key = true) => {
     const keys = [8, 27, 403, 461];
-    if (keys.includes(event.keyCode)){
+    if (keys.includes(event.keyCode) || key === false){
       const modal = document.querySelector('.show');
       modal.classList.remove('show');
       modal.classList.add('hide');
@@ -412,6 +426,7 @@ class App extends Component {
                     setChange={this.commitChange}
                     menuChange={this.switchFocusable}
                     mqttChange={this.sendMQTTChange}
+                    focusHandler={this.focused}
                     showAlert={this.alertMsg ? true : false}/>
                 <div className="Camera-Btn">
                   <img src={process.env.PUBLIC_URL + '/camera.svg'} alt='camera_icon'/>
@@ -419,7 +434,10 @@ class App extends Component {
                 </div>
               </div>
             </div>
-            <div className="Info-Message">Smart Home Service powered by Home Assistant with a MQTT2GO compliant Add-on by Brno University of Technology.</div>
+            <div className="Info-Message">
+              <div dangerouslySetInnerHTML={{ __html: this.homes[this.home_id].info}}/>
+              <div>Device Model: {this.homes[this.home_id].model} • Firmware version: {this.homes[this.home_id].system}</div>
+            </div>
             <div id="Modal-Menu"></div>
             <div id="Alert-Msg"></div>
             {this.getAlert()}

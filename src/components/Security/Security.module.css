@@ -120,3 +120,12 @@
 .Alert p {
     color: #f2f2f2 !important;
 }
+
+.Back{
+    height: 64px;
+    width: 60px;
+    position: absolute;
+    left: 100px;
+    top: 250px;
+    outline: none;
+}

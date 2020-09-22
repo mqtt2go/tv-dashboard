@@ -257,7 +257,22 @@ h3 {
 }
 
 .Info-Message{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.Info-Message div{
   color: #737373;
   font-size: 20px;
-  margin: 20px;
+  margin: 10px 20px 0 20px;
+  text-align: center;
+}
+
+.Info-Message div:last-child{
+  border-top: 1px solid #bfbfbf;
+  margin-bottom: 20px;
+  padding: 4px 25px;
+  width: fit-content;
 }

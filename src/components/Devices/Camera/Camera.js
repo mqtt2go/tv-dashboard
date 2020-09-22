@@ -32,14 +32,19 @@ const camera = (props) => {
         if (props.menuVisible){
             return(
                 <Control element={"Modal-Menu"}>
-                    <div className={classes.CameraMenu + (props.showAlert ? ' show' : ' hide')} onKeyUp={(event) => props.hideMenu(event)}>
-                        <FocusableSection className={classes.MenuWrap} neighborUp='' neighborDown='' neighborLeft='' neighborRight='' sectionId='camera-stream'>
-                            <Focusable className={classes.StreamWrap + ' menu-active'}>
+                    <div className={classes.CameraMenu + (props.showAlert ? ' show' : ' hide')}>
+                        <FocusableSection className={classes.MenuWrap} neighborUp='' neighborDown='' neighborLeft='@back-btn' neighborRight='' sectionId='camera-stream'>
+                            <Focusable className={classes.StreamWrap + ' menu-active'} onKeyUp={(event) => props.hideMenu(event)}>
                                     <p className={classes.Name + ' ' + classes.Shadow}>{props.item.name}</p>
                                     <p className={classes.Live}>Live</p>
                                     <img id="camera-stream" src={props.item.image} alt="Camera stream"></img>
                             </Focusable>
-                        </FocusableSection> 
+                        </FocusableSection>
+                        <FocusableSection sectionId='back-btn' neighborUp='' neighborDown='' neighborLeft='' neighborRight=''>
+                            <Focusable className={classes.Back} onKeyUp={(event) => props.hideMenu(event, false)}>
+                                <img alt="back" src={process.env.PUBLIC_URL + '/back_w.svg'}/>
+                            </Focusable>
+                        </FocusableSection>
                     </div>
                 </Control>
             )

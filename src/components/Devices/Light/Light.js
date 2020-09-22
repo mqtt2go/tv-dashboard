@@ -47,7 +47,7 @@ const light = (props) => {
                     sectionId='color'
                     neighborUp='@buttons'
                     neighborDown='@brightness'
-                    neighborLeft=''
+                    neighborLeft='@back-btn'
                     neighborRight=''
                     className={classes.ColorWrap}>
                     {
@@ -71,7 +71,7 @@ const light = (props) => {
                                 <FocusableSection sectionId='buttons'
                                     neighborUp=''
                                     neighborDown={props.item.type === 'light_rgb' ? '@color' : '@brightness'}
-                                    neighborLeft=''
+                                    neighborLeft='@back-btn'
                                     neighborRight=''
                                     className={classes.StateBtnWrap}>
                                     <Focusable className={classes.StateBtn + ' menu-active'} onClickEnter={() => props.stateClicked(props.item.id, props.room, 'on')}>
@@ -88,7 +88,7 @@ const light = (props) => {
                                     sectionId='brightness'
                                     neighborUp={props.item.type === 'light_rgb' ? '@color' : '@buttons'}
                                     neighborDown=''
-                                    neighborLeft=''
+                                    neighborLeft='@back-btn'
                                     neighborRight=''
                                     className={classes.BrightnessWrap}>
                                     {
@@ -100,6 +100,15 @@ const light = (props) => {
                                                     </Focusable>
                                         })
                                     }
+                                </FocusableSection>
+                                <FocusableSection sectionId='back-btn'
+                                    neighborUp=''
+                                    neighborDown=''
+                                    neighborLeft=''
+                                    neighborRight=''>
+                                    <Focusable className={classes.Back} onKeyUp={(event) => props.hideMenu(event, false)}>
+                                        <img alt="back" src={process.env.PUBLIC_URL + '/back.svg'}/>
+                                    </Focusable>
                                 </FocusableSection>
                         </div>
                     </Control>

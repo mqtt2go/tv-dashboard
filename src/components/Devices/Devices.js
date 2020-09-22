@@ -96,14 +96,14 @@ class Devices extends Component {
         }
     }
 
-    hideMenuHandler = (event, id, room) => {
+    hideMenuHandler = (event, key = true) => {
         const keys = [8, 27, 403, 461];
-        if (keys.includes(event.keyCode)){
+        if (keys.includes(event.keyCode) || key === false){
         const modal = document.querySelector('.show');
             modal.classList.remove('show');
             modal.classList.add('hide');
-            this.props.menuChange(false, true);
             this.selectedItem = null;
+            this.props.menuChange(false, true);
             this.focusLast();
         }
     }
@@ -164,9 +164,8 @@ class Devices extends Component {
     }
 
     focused = (e) => {
-       e.target.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'center'});
-       /*console.log(e.target.closest('.Wrap-Vertical'));
-       e.target.closest('.Wrap-Vertical').scrollIntoView({behavior: 'smooth'})*/
+       /*e.target.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'center'});*/
+        this.props.focusHandler(e)
     }
 
     render(){
