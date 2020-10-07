@@ -28,14 +28,14 @@ const options = {
   };
 
 //const client = mqtt.connect(`mqtt://${window.location.hostname}:59001`, options);
-const client = mqtt.connect('mqtt://147.229.69.68:59001', options);
+const client = mqtt.connect('mqtt://tv-dashboard.duckdns.org:59001', options);
 //const client = mqtt.connect(`mqtt://192.168.42.172:9001`, options);
 
 class App extends Component {
-  //homes = [{name: 'Brno Home', prefix: 'BRQ/BUT', info: 'Smart Home Service powered by <strong>Home Assistant</strong> with a <strong>MQTT2GO</strong> compliant Add-on by <strong>Brno University of Technology</strong>.', system: 'TurrisOS 5.0.3', model: 'Turris Omnia'},
-  //         {name: 'Vienna Home', prefix: 'VIE/A1', info: 'Any Smart Home Service, e.g., Powered by <strong>Perenio</strong>, <strong>Tuya</strong>, or <strong>Vivalabs</strong> with an <strong>MQTT2GO</strong> compliant AddOn can be connected to the <strong>Xplore TV</strong> dashboard!', system: 'TurrisOS 5.0.3', model: 'Turris Omnia'}];
-  homes = [{name: 'Brno Home', prefix: 'BRQ/BUT', info: 'Smart Home Service powered by <strong>Home Assistant</strong> with a <strong>MQTT2GO</strong> compliant Add-on by <strong>Brno University of Technology</strong>.', system: 'PEJIR 7.1.3-CB-but-A1', model: 'PEJIR01_AABc'},
-           {name: 'Vienna Home', prefix: 'VIE/A1', info: 'Any Smart Home Service, e.g., Powered by <strong>Perenio</strong>, <strong>Tuya</strong>, or <strong>Vivalabs</strong> with an <strong>MQTT2GO</strong> compliant AddOn can be connected to the <strong>Xplore TV</strong> dashboard!', system: 'PEJIR 7.1.3-CB-but-A1', model: 'PEJIR01_AABc'}];
+  homes = [{name: 'Brno Home', prefix: 'BRQ/BUT', info: 'Smart Home Service powered by <strong>Home Assistant</strong> with a <strong>MQTT2GO</strong> compliant Add-on by <strong>Brno University of Technology</strong>.', system: 'TurrisOS 5.0.3', model: 'Turris Omnia'},
+           {name: 'Vienna Home', prefix: 'VIE/A1', info: 'Any Smart Home Service, e.g., Powered by <strong>Perenio</strong>, <strong>Tuya</strong>, or <strong>Vivalabs</strong> with an <strong>MQTT2GO</strong> compliant AddOn can be connected to the <strong>Xplore TV</strong> dashboard!', system: 'TurrisOS 5.0.3', model: 'Turris Omnia'}];
+  //homes = [{name: 'Brno Home', prefix: 'BRQ/BUT', info: 'Smart Home Service powered by <strong>Home Assistant</strong> with a <strong>MQTT2GO</strong> compliant Add-on by <strong>Brno University of Technology</strong>.', system: 'PEJIR 7.1.3-CB-but-A1', model: 'PEJIR01_AABc'},
+  //         {name: 'Vienna Home', prefix: 'VIE/A1', info: 'Any Smart Home Service, e.g., Powered by <strong>Perenio</strong>, <strong>Tuya</strong>, or <strong>Vivalabs</strong> with an <strong>MQTT2GO</strong> compliant AddOn can be connected to the <strong>Xplore TV</strong> dashboard!', system: 'PEJIR 7.1.3-CB-but-A1', model: 'PEJIR01_AABc'}];
   home_id = 0;
   state = {scenes: [], security: [], alert: [], activities: [], rooms: []};
   activities = [];
@@ -119,6 +119,8 @@ class App extends Component {
     }
 
     if (device[type] === value) return;
+    if (type === 'color') device['state'] = 'on';
+    if (type === 'brightness' && value > 0) device['state'] = 'on';
     device[type] = value;
     this.setState({'rooms': rooms});
   }
@@ -370,7 +372,7 @@ class App extends Component {
       client.publish(`${this.homes[this.home_id].prefix}/in`, JSON.stringify({priority_level: 1, type: 'query_gui_dev', timestamp: new Date().getTime()}));
       client.subscribe(`${this.homes[this.home_id].prefix}/+/+/out`);
       client.subscribe(`${this.homes[this.home_id].prefix}/events/in`);
-      client.on('message', (topic, message) => this.parseMqtt(topic, message.toString()));
+      //client.on('message', (topic, message) => this.parseMqtt(topic, message.toString()));
     }
   }
 
@@ -380,7 +382,7 @@ class App extends Component {
       <SpatialNavigation className="App">
           <Cockpit homeName="A1 Smart Home"/>
           <FocusableSection className="Overview Tabs" sectionId='tabs'>
-            <Tabs homes={this.homes} homeId={this.home_id} homeHandler={this.switchHomeHandler}/>
+            <Tabs homes={this.homes} homeId={this.home_id} homeHandler={this.switchHomeHandler} focusHandler={this.focused}/>
           </FocusableSection>
           <div className="Row">
               <div className="Scenes">
