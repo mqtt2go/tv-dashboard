@@ -183,6 +183,21 @@ class App extends Component {
     client.subscribe(`${this.homes[this.home_id].prefix}/events/in`);
     client.on('message', (topic, message) => this.parseMqtt(topic, message.toString()));
     setInterval(() => this.updateCameraImage(), 15000);
+
+    window.onpopstate = (event) => {
+        if(event.state == null){
+          const modal = document.querySelector('.show');
+          modal.classList.remove('show');
+          modal.classList.add('hide');
+          this.selectedItem = null;
+          this.switchFocusable(false, true);
+          this.activities = [];
+          if (this.lastSelected) {
+            this.lastSelected.focus();
+            this.lastSelected = null;
+          }
+        }
+      }
   }
 
   shouldComponentUpdate(){
@@ -295,7 +310,7 @@ class App extends Component {
   }
 
   commitChange = (id, room_id, new_state) => {
-    this.menuVisible = false;
+    //this.menuVisible = true;
     const rooms = [...this.state['rooms']];
     const roomIdx = rooms.findIndex(item => {
         return item.id === room_id;
@@ -321,10 +336,18 @@ class App extends Component {
     e.target.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'center'});
   }
 
+  setLastSelected = (target) => {
+    this.lastSelected = target;
+  }
+
+  setSelected = (target) => {
+    this.selectedItem = target;
+  }
+
   hideMenuHandler = (event, key = true) => {
     const keys = [8, 27, 403, 461];
     if (keys.includes(event.keyCode) || key === false){
-      const modal = document.querySelector('.show');
+      /*const modal = document.querySelector('.show');
       modal.classList.remove('show');
       modal.classList.add('hide');
       this.selectedItem = null;
@@ -333,8 +356,10 @@ class App extends Component {
       if (this.lastSelected) {
         this.lastSelected.focus();
         this.lastSelected = null;
-      }
+      }*/
+      window.history.back();
     }
+    
   }
 
 
@@ -346,6 +371,7 @@ class App extends Component {
       client.publish(`${this.homes[this.home_id].prefix}/in`, JSON.stringify({type: 'query_log', timestamp: +new Date()}));
       client.subscribe(`${this.homes[this.home_id].prefix}/out`);
     }
+    window.history.pushState({'menu': true}, null, window.location.pathname + 'menu');
     setTimeout(() => {
       const modal = document.querySelector('.hide');
       modal.classList.remove('hide');
@@ -365,7 +391,7 @@ class App extends Component {
     this.home_id = home;
     if (home === 1) {
       this.activities = [{}];
-      this.setState({"scenes":[{"id":"scn_1","name":"Lights OFF","icon":"moon","active":false},{"id":"scn_2","name":"Lights ON","icon":"sun","active":false},{"id":"scn_3","name":"Movie time","icon":"movie","active":false},{"id":"scn_4","name":"Reading","icon":"glasses","active":false}],"alert":[{"event_name":"consumption_alert","message":"Power consumption within the limit.","status":"ok","timestamp":0},{"event_name":"movement_alert","message":"No movement detected.","status":"ok","timestamp":0},{"event_name":"humidity_alert","message":"Humidity within the limit.","status":"ok","timestamp":0},{"event_name":"temperature_alert","message":"Temperature within the limit.","status":"ok","timestamp":0},{"event_name":"lights_alert","message":"All lights in regular operation.","status":"ok","timestamp":0}],"security":[{"id":"sec_1","type":"button","name":"Arm","icon":"arm","active":false},{"id":"sec_2","type":"button","name":"Disarmed","icon":"disarm","active":true}],"activities":[{"timestamp": new Date().getTime() / 1000 - 125,"message":"Krystof is away"},{"timestamp": new Date().getTime() / 1000 - 915,"message":"Air conditioning turned On"},{"timestamp": new Date().getTime() / 1000 - 3652,"message":"Vacuum cleaner turned Off"}],"rooms":[{"id":"room_0","devices":[{"id":"camera1","name":"Living Room","type":"camera","image":"http://147.229.69.68:58123/local/images/livingroom.png","events":{"message":"No motion detected","timestamp":0}},{"id":"sb1","name":"RGB Lamp","type":"light_rgb","color":0,"brightness":0,"state":"off"},{"id":"sh25","name":"Window Blinds","type":"blinds","position":50},{"id":"plugs","name":"Air Conditioning","type":"socket","voltage":235,"current":0.42,"consumption":96.5,"state":"on"},{"id":"th16","name":"Projector","type":"switch","temperature":26.0,"humidity":54.7,"state":"off"}]},{"id":"room_1","devices":[{"id":"camera2","name":"Garden","type":"camera","image":"http://147.229.69.68:58123/local/images/garden.png","events":{"message":"No motion detected","timestamp":0}},{"id":"bulbs_non","name":"Foountain Light*","type":"light_rgb","technology":"Shelly","color":0,"brightness":60,"state":"on"},{"id":"ht_non","name":"Ambient Sensor*","type":"sensor","technology":"Shelly","temperature":24.0,"humidity":55.5},{"id":"fibaro_socket","name":"Pump*","type":"switch","technology":"Zwave","state":"off"}]},{"id":"room_None","devices":[{"id":"camera3","name":"Entrance","type":"camera","image":"http://147.229.69.68:58123/local/images/entrance.png","events":{"message":"No motion detected","timestamp":0}},{"id":"zipato_bulb_2_level","name":"Chandelier*","type":"light_level","technology":"ZWave","brightness":20,"state":"on"},{"id":"th16_2","name":"Vacuum cleaner","type":"switch","temperature":26.3,"humidity":52.1,"state":"off"}]}]});
+      this.setState({"scenes":[{"id":"scn_1","name":"Lights OFF","icon":"moon","active":false},{"id":"scn_2","name":"Lights ON","icon":"sun","active":false},{"id":"scn_3","name":"Movie time","icon":"movie","active":false},{"id":"scn_4","name":"Reading","icon":"glasses","active":false}],"alert":[{"event_name":"consumption_alert","message":"Power consumption within the limit.","status":"ok","timestamp":0},{"event_name":"movement_alert","message":"No movement detected.","status":"ok","timestamp":0},{"event_name":"humidity_alert","message":"Humidity within the limit.","status":"ok","timestamp":0},{"event_name":"temperature_alert","message":"Temperature within the limit.","status":"ok","timestamp":0},{"event_name":"lights_alert","message":"All lights in regular operation.","status":"ok","timestamp":0}],"security":[{"id":"sec_1","type":"button","name":"Arm","icon":"arm","active":false},{"id":"sec_2","type":"button","name":"Disarmed","icon":"disarm","active":true}],"activities":[{"timestamp": new Date().getTime() / 1000 - 125,"message":"Krystof is away"},{"timestamp": new Date().getTime() / 1000 - 915,"message":"Air conditioning turned On"},{"timestamp": new Date().getTime() / 1000 - 3652,"message":"Vacuum cleaner turned Off"}],"rooms":[{"id":"room_0","devices":[{"id":"camera1","name":"Living Room","type":"camera","image":"http://147.229.149.12:58123/local/images/livingroom.png","events":{"message":"No motion detected","timestamp":0}},{"id":"sb1","name":"RGB Lamp","type":"light_rgb","color":0,"brightness":0,"state":"off"},{"id":"sh25","name":"Window Blinds","type":"blinds","position":50},{"id":"plugs","name":"Air Conditioning","type":"socket","voltage":235,"current":0.42,"consumption":96.5,"state":"on"},{"id":"th16","name":"Projector","type":"switch","temperature":26.0,"humidity":54.7,"state":"off"}]},{"id":"room_1","devices":[{"id":"camera2","name":"Garden","type":"camera","image":"http://147.229.149.12:58123/local/images/garden.png","events":{"message":"No motion detected","timestamp":0}},{"id":"bulbs_non","name":"Foountain Light*","type":"light_rgb","technology":"Shelly","color":0,"brightness":60,"state":"on"},{"id":"ht_non","name":"Ambient Sensor*","type":"sensor","technology":"Shelly","temperature":24.0,"humidity":55.5},{"id":"fibaro_socket","name":"Pump*","type":"switch","technology":"Zwave","state":"off"}]},{"id":"room_None","devices":[{"id":"camera3","name":"Entrance","type":"camera","image":"http://147.229.149.12:58123/local/images/entrance.png","events":{"message":"No motion detected","timestamp":0}},{"id":"zipato_bulb_2_level","name":"Chandelier*","type":"light_level","technology":"ZWave","brightness":20,"state":"on"},{"id":"th16_2","name":"Vacuum cleaner","type":"switch","temperature":26.3,"humidity":52.1,"state":"off"}]}]});
     } else {
       client.subscribe(`${this.homes[this.home_id].prefix}/devices/out`);
       client.subscribe(`${this.homes[this.home_id].prefix}/activities/out`);
@@ -429,6 +455,10 @@ class App extends Component {
                     menuChange={this.switchFocusable}
                     mqttChange={this.sendMQTTChange}
                     focusHandler={this.focused}
+                    hideMenu={this.hideMenuHandler}
+                    lastSelectHandler={this.setLastSelected}
+                    selectedItem={this.selectedItem}
+                    selectedHandler={this.setSelected}
                     showAlert={this.alertMsg ? true : false}/>
                 <div className="Camera-Btn">
                   <img src={process.env.PUBLIC_URL + '/camera.svg'} alt='camera_icon'/>

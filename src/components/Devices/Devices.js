@@ -9,15 +9,17 @@ import { FocusableSection } from 'react-js-spatial-navigation';
 
 class Devices extends Component {
 
-    selectedItem = null;
-    lastSelected = null;
+    //selectedItem = null;
+    //lastSelected = null;
 
     showMenuHandler = (event, device) => {
-        this.selectedItem = device;
-        this.lastSelected = event.target;
+        this.props.selectedHandler(device);
+        //this.lastSelected = event.target;
+        this.props.lastSelectHandler(event.target);
         if (device.type === 'camera'){
             this.props.mqttChange(device.id, 'stream', 'stream', 'GET_STREAM');
         }
+        window.history.pushState({'menu': true}, null, window.location.pathname + 'menu');
         this.props.menuChange(true);
     }
 
@@ -31,8 +33,8 @@ class Devices extends Component {
         if (device.type.startsWith('light_')){
             return(
                 <Light item={device}
-                    menuVisible={device === this.selectedItem ? true : false}
-                    selectedItem={this.selectedItem}
+                    menuVisible={device === this.props.selectedItem ? true : false}
+                    selectedItem={this.props.selectedItem}
                     showMenu={this.showMenuHandler}
                     hideMenu={this.hideMenuHandler}
                     stateClicked={this.stateHandler}
@@ -48,7 +50,7 @@ class Devices extends Component {
         if (device.type === 'blinds'){
             return(
                 <Blinds item={device}
-                    menuVisible={device === this.selectedItem ? true : false}
+                    menuVisible={device === this.props.selectedItem ? true : false}
                     showMenu={this.showMenuHandler}
                     hideMenu={this.hideMenuHandler}
                     levelClicked={this.blindsHandler}
@@ -62,7 +64,7 @@ class Devices extends Component {
         if (device.type === 'camera'){
             return(
                 <Camera item={device}
-                    menuVisible={device === this.selectedItem ? true : false}
+                    menuVisible={device === this.props.selectedItem ? true : false}
                     room={room}
                     key={device.id}
                     focusHandler={this.focused}
@@ -76,40 +78,29 @@ class Devices extends Component {
     }
 
     componentDidUpdate(){
-      if (this.selectedItem && this.props.showAlert === false){
-            setTimeout(() => {
-                const modal = document.querySelector('.hide');
-                modal.classList.remove('hide');
-                modal.classList.add('show');
-                const el = document.querySelector('.menu-active');
-                if(el){
-                    el.focus();
-                }
-            }, 50);
-        } 
-    }
-
-    focusLast(){
-        if (this.lastSelected) {
-            this.lastSelected.focus();
-            this.lastSelected = null;
-        }
+        if (this.props.selectedItem && this.props.showAlert === false){
+            if (typeof this.props.selectedItem == "string") return;
+                setTimeout(() => {
+                    const modal = document.querySelector('.hide');
+                    modal.classList.remove('hide');
+                    modal.classList.add('show');
+                    const el = document.querySelector('.menu-active');
+                    if(el){
+                        el.focus();
+                    }
+                }, 50);
+            } 
     }
 
     hideMenuHandler = (event, key = true) => {
         const keys = [8, 27, 403, 461];
         if (keys.includes(event.keyCode) || key === false){
-        const modal = document.querySelector('.show');
-            modal.classList.remove('show');
-            modal.classList.add('hide');
-            this.selectedItem = null;
-            this.props.menuChange(false, true);
-            this.focusLast();
+            window.history.back();
         }
     }
 
     switchHandler = (event, id, room, item) => {
-        this.lastSelected = event.target;
+        this.props.lastSelectHandler(event.target);
         item.state = item.state.toLowerCase() === 'off' ? 'on' : 'off';
         this.props.setChange(id, room, item);
         this.props.mqttChange(id, 'set', 'switch', item.state);
@@ -117,23 +108,23 @@ class Devices extends Component {
 
     stateHandler = (id, room, state) => {
         //console.log(id, room, state);
-        const item = this.selectedItem;
+        const item = this.props.selectedItem;
         item.state = state;
-        this.selectedItem = null; 
+        this.props.selectedHandler(null); 
         this.props.setChange(id, room, item);
         this.props.mqttChange(id, 'set', 'switch', state);
-        this.focusLast();
+        window.history.back();
     }
 
     blindsHandler = (id, room, level) => {
         //console.log(id, room, level);
-        if (this.selectedItem.position !== level) this.selectedItem.moving = true;
-        const item = this.selectedItem;
+        if (this.props.selectedItem.position !== level) this.props.selectedItem.moving = true;
+        const item = this.props.selectedItem;
         item.position = level;
-        this.selectedItem = null;
+        this.props.selectedHandler(null);
         this.props.setChange(id, room, item);
         this.props.mqttChange(id, 'set', 'position', level);
-        this.focusLast();
+        window.history.back();
     }
 
     colorHandler = (id, room, color) => {
@@ -144,23 +135,23 @@ class Devices extends Component {
             g: parseInt(aRgbHex[1], 16),
             b: parseInt(aRgbHex[2], 16)
         };
-        const item = this.selectedItem;
+        const item = this.props.selectedItem;
         item.color = rgb_color;
-        this.selectedItem = null;
+        this.props.selectedHandler(null);
         if (item.state === 'off') item.state = 'on';
         this.props.setChange(id, room, item);
         this.props.mqttChange(id, 'color', 'color', rgb_color);
-        this.focusLast();
+        window.history.back();
     }
 
     brightnessHandler = (id, room, brightness) => {
-        const item = this.selectedItem;
+        const item = this.props.selectedItem;
         item.brightness = brightness;
-        this.selectedItem = null;
+        this.props.selectedHandler(null);
         if (item.state === 'off') item.state = 'on';
         this.props.setChange(id, room, item);
         this.props.mqttChange(id, 'brightness', 'brightness', brightness);
-        this.focusLast();
+        window.history.back();
     }
 
     focused = (e) => {
