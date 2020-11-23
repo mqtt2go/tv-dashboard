@@ -1,6 +1,6 @@
 # A1 TV Dashboard
 
-![][leanback.png]
+![TV Dashboard](leanback.png)
 
 ## Available Scripts
 
