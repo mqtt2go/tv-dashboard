@@ -7,7 +7,7 @@ const tabs = (props) => {
         props.homes.map((home, idx) => {
             return(
               <Focusable className={props.homeId === idx ? "Tab Active" : "Tab"} key={idx}
-                         onClickEnter={() => props.homeHandler(idx)} onFocus={(event) => props.focusHandler(event)}>
+                         onClickEnter={() => props.homeHandler(idx)} onFocus={(event) => props.focusHandler(event)} onKeyUp={(event) => props.hideMenu(event)}>
                 <p>{home.name}</p>
               </Focusable>
             )

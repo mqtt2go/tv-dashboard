@@ -184,8 +184,16 @@ class App extends Component {
     client.on('message', (topic, message) => this.parseMqtt(topic, message.toString()));
     setInterval(() => this.updateCameraImage(), 15000);
 
+    window.history.pushState(null, null, window.location.pathname);
+    //window.history.replaceState({'home': true}, null, window.location.pathname);
     window.onpopstate = (event) => {
-        if(event.state == null){
+        if (event.state == null){
+          if (this.lastSelected == null || !this.lastSelected.classList.contains('Tab')) {
+            window.history.pushState({'home': true}, null, window.location.pathname);
+          } else{
+            window.history.back();
+          }
+        } else if(event.state['home'] === true){
           const modal = document.querySelector('.show');
           modal.classList.remove('show');
           modal.classList.add('hide');
@@ -196,7 +204,7 @@ class App extends Component {
             this.lastSelected.focus();
             this.lastSelected = null;
           }
-        }
+        } 
       }
   }
 
@@ -275,7 +283,6 @@ class App extends Component {
   }
 
   
-
   getAlert(){
     if(this.alertMsg){
       setTimeout(() => {
@@ -347,19 +354,8 @@ class App extends Component {
   hideMenuHandler = (event, key = true) => {
     const keys = [8, 27, 403, 461];
     if (keys.includes(event.keyCode) || key === false){
-      /*const modal = document.querySelector('.show');
-      modal.classList.remove('show');
-      modal.classList.add('hide');
-      this.selectedItem = null;
-      this.switchFocusable(false, true);
-      this.activities = [];
-      if (this.lastSelected) {
-        this.lastSelected.focus();
-        this.lastSelected = null;
-      }*/
       window.history.back();
     }
-    
   }
 
 
@@ -371,7 +367,9 @@ class App extends Component {
       client.publish(`${this.homes[this.home_id].prefix}/in`, JSON.stringify({type: 'query_log', timestamp: +new Date()}));
       client.subscribe(`${this.homes[this.home_id].prefix}/out`);
     }
-    window.history.pushState({'menu': true}, null, window.location.pathname + 'menu');
+    window.history.replaceState({'home': true}, null, window.location.pathname);
+    window.history.pushState({'home': true}, null, window.location.pathname + 'menu');
+
     setTimeout(() => {
       const modal = document.querySelector('.hide');
       modal.classList.remove('hide');
@@ -408,7 +406,11 @@ class App extends Component {
       <SpatialNavigation className="App">
           <Cockpit homeName="A1 Smart Home"/>
           <FocusableSection className="Overview Tabs" sectionId='tabs'>
-            <Tabs homes={this.homes} homeId={this.home_id} homeHandler={this.switchHomeHandler} focusHandler={this.focused}/>
+            <Tabs homes={this.homes}
+              homeId={this.home_id}
+              homeHandler={this.switchHomeHandler}
+              focusHandler={this.focused}
+              hideMenu={this.hideMenuHandler}/>
           </FocusableSection>
           <div className="Row">
               <div className="Scenes">
