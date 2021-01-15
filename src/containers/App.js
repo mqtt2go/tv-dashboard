@@ -185,7 +185,7 @@ class App extends Component {
     setInterval(() => this.updateCameraImage(), 15000);
 
     window.history.pushState(null, null, window.location.pathname);
-    //window.history.replaceState({'home': true}, null, window.location.pathname);
+    window.history.replaceState({'home': true}, null, window.location.pathname);
     window.onpopstate = (event) => {
         if (event.state == null){
           if (this.lastSelected == null || !this.lastSelected.classList.contains('Tab')) {
