@@ -25,10 +25,18 @@ class Devices extends Component {
 
     getDevice = (device, room) => {
         if (device.type === 'switch' || device.type === 'light'){
-            return <Switch item={device} stateClicked={this.switchHandler} key={device.id} room={room.id} focusHandler={this.focused}/>
+            return <Switch item={device}
+                        stateClicked={this.switchHandler}
+                        backHandler={this.props.sendBack}
+                        key={device.id} room={room.id}
+                        focusHandler={this.props.focusHandler}/>
         }
         if (device.type === 'socket'){
-            return <Socket item={device} stateClicked={this.switchHandler} key={device.id} room={room.id} focusHandler={this.focused}/>
+            return <Socket item={device}
+                        stateClicked={this.switchHandler}
+                        backHandler={this.props.sendBack}
+                        key={device.id} room={room.id}
+                        focusHandler={this.props.focusHandler}/>
         }
         if (device.type.startsWith('light_')){
             return(
@@ -36,14 +44,15 @@ class Devices extends Component {
                     menuVisible={device === this.props.selectedItem ? true : false}
                     selectedItem={this.props.selectedItem}
                     showMenu={this.showMenuHandler}
-                    hideMenu={this.hideMenuHandler}
+                    hideMenu={this.props.hideMenu}
                     stateClicked={this.stateHandler}
                     colorClicked={this.colorHandler}
                     bightnessClicked={this.brightnessHandler}
                     key={device.id}
                     room={room.id}
-                    focusHandler={this.focused}
+                    focusHandler={this.props.focusHandler}
                     showAlert={this.props.showAlert}
+                    backHandler={this.props.sendBack}
                 />
             )
         }
@@ -52,12 +61,13 @@ class Devices extends Component {
                 <Blinds item={device}
                     menuVisible={device === this.props.selectedItem ? true : false}
                     showMenu={this.showMenuHandler}
-                    hideMenu={this.hideMenuHandler}
+                    hideMenu={this.props.hideMenu}
                     levelClicked={this.blindsHandler}
                     key={device.id}
                     room={room.id}
-                    focusHandler={this.focused}
+                    focusHandler={this.props.focusHandler}
                     showAlert={this.props.showAlert}
+                    backHandler={this.props.sendBack}
                 />
             )
         }
@@ -67,10 +77,11 @@ class Devices extends Component {
                     menuVisible={device === this.props.selectedItem ? true : false}
                     room={room}
                     key={device.id}
-                    focusHandler={this.focused}
+                    focusHandler={this.props.focusHandler}
                     showMenu={this.showMenuHandler}
-                    hideMenu={this.hideMenuHandler}
+                    hideMenu={this.props.hideMenu}
                     showAlert={this.props.showAlert}
+                    backHandler={this.props.sendBack}
                 />
             )
         }
@@ -90,13 +101,6 @@ class Devices extends Component {
                     }
                 }, 50);
             } 
-    }
-
-    hideMenuHandler = (event, key = true) => {
-        const keys = [8, 27, 403, 461];
-        if (keys.includes(event.keyCode) || key === false){
-            window.history.back();
-        }
     }
 
     switchHandler = (event, id, room, item) => {
@@ -152,11 +156,6 @@ class Devices extends Component {
         this.props.setChange(id, room, item);
         this.props.mqttChange(id, 'brightness', 'brightness', brightness);
         window.history.back();
-    }
-
-    focused = (e) => {
-       /*e.target.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'center'});*/
-        this.props.focusHandler(e)
     }
 
     render(){

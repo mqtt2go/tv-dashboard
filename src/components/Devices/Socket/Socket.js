@@ -19,6 +19,7 @@ const socket = (props) => {
         <Focusable
             className={classes.Item}
             key={props.item.id}
+            onKeyUp={(event) => props.backHandler(event)}
             onFocus={(event) => props.focusHandler(event)}
             onClickEnter={(event) => props.stateClicked(event, props.item.id, props.room, props.item)}>
             <div className={classes.Wrap}>

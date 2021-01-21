@@ -9,6 +9,7 @@ const swtch = (props) => {
         <Focusable
             className={classes.Item}
             key={props.item.id}
+            onKeyUp={(event) => props.backHandler(event)}
             onClickEnter={(event) => props.stateClicked(event, props.item.id, props.room, props.item)}
             onFocus={(event) => props.focusHandler(event)}>
             <div className={classes.Wrap}>

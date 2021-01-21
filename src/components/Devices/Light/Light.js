@@ -116,7 +116,10 @@ const light = (props) => {
             }
         }
 
-    return(<Focusable className={classes.Item} onClickEnter={(event) => props.showMenu(event, props.item)} onFocus={(event) => props.focusHandler(event)}>
+    return(<Focusable className={classes.Item}
+                onClickEnter={(event) => props.showMenu(event, props.item)}
+                onKeyUp={(event) => props.backHandler(event)}
+                onFocus={(event) => props.focusHandler(event)}>
             <div className={classes.Wrap}>
                 <img className={classes.Icon} src={process.env.PUBLIC_URL + '/' + getIcon(props.item.type, props.item.state) + '.svg'} alt='icon' />
                 <p className={classes.Name}>{props.item.name}</p>

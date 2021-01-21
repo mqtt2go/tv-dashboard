@@ -190,6 +190,8 @@ class App extends Component {
         if (event.state == null){
           if (this.lastSelected == null || !this.lastSelected.classList.contains('Tab')) {
             window.history.pushState({'home': true}, null, window.location.pathname);
+            const tab = document.querySelector('.Active');
+            tab.focus();
           } else{
             window.history.back();
           }
@@ -358,6 +360,11 @@ class App extends Component {
     }
   }
 
+  backHandler = (event) => {
+    if (event.keyCode === 27){
+      window.history.back();
+    }
+  }
 
   showMenuHandler = (event, item) => {
     this.lastSelected = event.target;
@@ -416,7 +423,7 @@ class App extends Component {
               <div className="Scenes">
                 <h3>Presets</h3>
                 <FocusableSection className="Wrap" sectionId='scenes'>
-                  <Scenes scenes={this.state.scenes} enterClicked={this.enterSelectedHandler} focusHandler={this.focused}/>
+                  <Scenes scenes={this.state.scenes} enterClicked={this.enterSelectedHandler} focusHandler={this.focused} sendBack={this.backHandler}/>
                 </FocusableSection>
               </div>
               <div className="Security">
@@ -424,6 +431,7 @@ class App extends Component {
                 <FocusableSection className="Wrap" sectionId='security'>
                   <Security security={this.state.security}
                       enterClicked={this.enterSelectedHandler}
+                      sendBack={this.backHandler}
                       focusHandler={this.focused}/>
                   <Alert status={this.state.alert}
                       alerts={this.state.alert}
@@ -431,6 +439,7 @@ class App extends Component {
                       menuVisible={this.selectedItem === 'alert' ? true : false}
                       focusHandler={this.focused}
                       showAlert={this.alertMsg ? true : false}
+                      sendBack={this.backHandler}
                       showMenu={this.showMenuHandler}
                       hideMenu={this.hideMenuHandler}/>
                 </FocusableSection>
@@ -445,6 +454,7 @@ class App extends Component {
                     showAlert={this.alertMsg ? true : false}
                     hideMenu={this.hideMenuHandler}
                     focusHandler={this.focused}
+                    sendBack={this.backHandler}
                     showMenu={this.showMenuHandler}/>
                 </div>
               </div>
@@ -461,6 +471,7 @@ class App extends Component {
                     lastSelectHandler={this.setLastSelected}
                     selectedItem={this.selectedItem}
                     selectedHandler={this.setSelected}
+                    sendBack={this.backHandler}
                     showAlert={this.alertMsg ? true : false}/>
                 <div className="Camera-Btn">
                   <img src={process.env.PUBLIC_URL + '/camera.svg'} alt='camera_icon'/>

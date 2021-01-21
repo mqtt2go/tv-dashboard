@@ -54,6 +54,7 @@ const camera = (props) => {
     return(
         <Focusable className={classes.Item}
             onFocus={(event) => props.focusHandler(event)}
+            onKeyUp={(event) => props.backHandler(event)}
             onClickEnter={(event) => props.showMenu(event, props.item)}>
             <div className={classes.ContWrap}>
                         <img className={classes.Background} src={props.item.image} alt='camera_icon'/>

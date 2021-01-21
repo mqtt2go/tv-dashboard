@@ -72,7 +72,10 @@ const alert = (props) => {
     const icon = getIcon();
     
     return (
-        <Focusable className={classes_arr.join(' ')} onFocus={(event) => props.focusHandler(event)} onClickEnter={(event) => props.showMenu(event, 'alert')}>
+        <Focusable className={classes_arr.join(' ')}
+            onFocus={(event) => props.focusHandler(event)}
+            onKeyUp={(event) => props.sendBack(event)}
+            onClickEnter={(event) => props.showMenu(event, 'alert')}>
             <img src={process.env.PUBLIC_URL + '/' + icon + '.svg'} alt='security_icon'/>
             <p>{getText()}</p>
             {getMenu()}

@@ -69,7 +69,10 @@ const activity = (props) => {
     }
 
     return(
-        <Focusable className={classes.Activity} onFocus={(event) => props.focusHandler(event)} onClickEnter={(event) => props.showMenu(event, 'activity')}>
+        <Focusable className={classes.Activity}
+            onFocus={(event) => props.focusHandler(event)}
+            onKeyUp={(event) => props.sendBack(event)}
+            onClickEnter={(event) => props.showMenu(event, 'activity')}>
             {props.activities.map((activity, idx) =>{
                 return (
                     <div className={classes.Row} key={idx}>

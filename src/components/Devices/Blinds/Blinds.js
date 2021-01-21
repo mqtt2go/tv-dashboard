@@ -61,7 +61,10 @@ const blinds = (props) => {
     }
 
     return (
-        <Focusable className={classes.Item} onClickEnter={(event) => props.showMenu(event, props.item)} onFocus={(event) => props.focusHandler(event)}>
+        <Focusable className={classes.Item}
+            onClickEnter={(event) => props.showMenu(event, props.item)}
+            onFocus={(event) => props.focusHandler(event)}
+            onKeyUp={(event) => props.backHandler(event)}>
             <div className={classes.Wrap}>
                 <img className={classes.Icon} src={process.env.PUBLIC_URL + '/blinds_' + getIcon(props.item.position) + '.svg'} alt='icon' />
                 <p className={classes.Name}>{props.item.name}</p>

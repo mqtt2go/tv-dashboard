@@ -16,6 +16,7 @@ const security = (props) => props.security.map((sec, idx) => {
     return (
         <Focusable className={classes.Item} key={sec.id}
             onClickEnter={(event) => props.enterClicked(event, sec.id)}
+            onKeyUp={(event) => props.sendBack(event)}
             onFocus={(event) => props.focusHandler(event)}>
             <img src={process.env.PUBLIC_URL + '/' + sec.icon + '.svg'} alt='security_icon'/>
             <p>{sec.name}</p>
