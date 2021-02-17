@@ -27,9 +27,13 @@ const options = {
     clientId: makeid(8)
   };
 
-//const client = mqtt.connect(`mqtt://${window.location.hostname}:59001`, options);
 const client = mqtt.connect('mqtt://tv-dashboard.duckdns.org:59001', options);
-//const client = mqtt.connect(`mqtt://192.168.42.172:9001`, options);
+
+client.stream.on('error', () => {
+  const rootEl = document.getElementById('root');
+  const message = `<div class="Error-wrap"><div class="Error-item"><img src="./ws_error.svg"/></div><div class="Error-item">Connection to the WebSocket server can not be established. Please contact your service provider for more information.</div></div>`;
+  rootEl.innerHTML = message;
+})
 
 class App extends Component {
   homes = [{name: 'Brno Home', prefix: 'BRQ/BUT', info: 'Smart Home Service powered by <strong>Home Assistant</strong> with a <strong>MQTT2GO</strong> compliant Add-on by <strong>Brno University of Technology</strong>.', system: 'TurrisOS 5.0.3', model: 'Turris Omnia'},
