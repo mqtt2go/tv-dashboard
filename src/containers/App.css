@@ -292,6 +292,7 @@ h3 {
   color: #737373;
   text-align: center;
   max-width: 800px;
+  outline: none;
 }
 
 .Error-item img{

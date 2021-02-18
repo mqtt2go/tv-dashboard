@@ -29,11 +29,6 @@ const options = {
 
 const client = mqtt.connect('mqtt://tv-dashboard.duckdns.org:59001', options);
 
-client.stream.on('error', () => {
-  const rootEl = document.getElementById('root');
-  const message = `<div class="Error-wrap"><div class="Error-item"><img src="./ws_error.svg"/></div><div class="Error-item">Connection to the WebSocket server can not be established. Please contact your service provider for more information.</div></div>`;
-  rootEl.innerHTML = message;
-})
 
 class App extends Component {
   homes = [{name: 'Brno Home', prefix: 'BRQ/BUT', info: 'Smart Home Service powered by <strong>Home Assistant</strong> with a <strong>MQTT2GO</strong> compliant Add-on by <strong>Brno University of Technology</strong>.', system: 'TurrisOS 5.0.3', model: 'Turris Omnia'},
@@ -49,6 +44,8 @@ class App extends Component {
   alertMsg = null;
   update = true;
   lastSelected = null;
+  cameraTimer = null;
+  loadStatus = 'loading';
 
   componentDidUpdate(){
     if (this.selectedItem){
@@ -130,6 +127,7 @@ class App extends Component {
   }
 
   parseMqtt(topic, message){
+    this.loadStatus = 'loaded';
     const device = topic.split('/');
     try {
       const data = JSON.parse(message);
@@ -186,12 +184,22 @@ class App extends Component {
     client.subscribe(`${this.homes[this.home_id].prefix}/+/+/out`);
     client.subscribe(`${this.homes[this.home_id].prefix}/events/in`);
     client.on('message', (topic, message) => this.parseMqtt(topic, message.toString()));
-    setInterval(() => this.updateCameraImage(), 15000);
+
+    client.stream.on('error', () => {
+      clearInterval(this.cameraTimer);
+      this.loadStatus = 'error';
+      this.forceUpdate();
+    });
+
+    this.cameraTimer = setInterval(() => this.updateCameraImage(), 15000);
 
     window.history.pushState(null, null, window.location.pathname);
     window.history.replaceState({'home': true}, null, window.location.pathname);
     window.onpopstate = (event) => {
         if (event.state == null){
+          if (this.loadStatus === 'error'){
+            window.history.back();
+          }
           if (this.lastSelected == null || !this.lastSelected.classList.contains('Tab')) {
             window.history.pushState({'home': true}, null, window.location.pathname);
             const tab = document.querySelector('.Active');
@@ -412,7 +420,28 @@ class App extends Component {
   }
 
   getContent(){
-    if (this.state.rooms.length > 0){
+    if (this.loadStatus === 'loading') {
+      return(
+        <div className='spinner'>
+          <div className="sk-folding-cube">
+            <div className="sk-cube1 sk-cube"></div>
+            <div className="sk-cube2 sk-cube"></div>
+            <div className="sk-cube4 sk-cube"></div>
+            <div className="sk-cube3 sk-cube"></div>
+          </div>
+          <p>Loading...</p>
+        </div>
+      )
+    } else if (this.loadStatus === 'error') {
+      return(
+        <SpatialNavigation className="Error-wrap">
+          <Focusable className="Error-item" onKeyUp={(event) => this.hideMenuHandler(event)}>
+            <img src="./ws_error.svg" alt="Error"/>
+          </Focusable>
+          <div className="Error-item">Connection to the WebSocket server can not be established. Please contact your service provider for more information.</div>
+        </SpatialNavigation>
+      )
+    } else if (this.state.rooms.length > 0) {
     return(
       <SpatialNavigation className="App">
           <Cockpit homeName="A1 Smart Home"/>
@@ -491,19 +520,7 @@ class App extends Component {
             <div id="Alert-Msg"></div>
             {this.getAlert()}
         </SpatialNavigation>
-    )} else {
-      return(
-        <div className='spinner'>
-          <div className="sk-folding-cube">
-            <div className="sk-cube1 sk-cube"></div>
-            <div className="sk-cube2 sk-cube"></div>
-            <div className="sk-cube4 sk-cube"></div>
-            <div className="sk-cube3 sk-cube"></div>
-          </div>
-          <p>Loading...</p>
-        </div>
-      )
-    }
+    )}
   }
 
   render (){
