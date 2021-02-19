@@ -290,9 +290,10 @@ h3 {
 
 .Error-item{
   color: #737373;
-  text-align: center;
+  text-align: justify;
   max-width: 800px;
   outline: none;
+  margin-bottom: 35px;
 }
 
 .Error-item img{

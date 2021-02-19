@@ -438,7 +438,8 @@ class App extends Component {
           <Focusable className="Error-item" onKeyUp={(event) => this.hideMenuHandler(event)}>
             <img src="./ws_error.svg" alt="Error"/>
           </Focusable>
-          <div className="Error-item">Connection to the WebSocket server can not be established. Please contact your service provider for more information.</div>
+          <div className="Error-item">Die erforderliche WebSocket-Verbindung kann nicht hergestellt werden. Bitte prüfen sie ihre Firewall- und Routereinstellungen oder wenden Sie sich für weitere Informationen an Ihren Dienstanbieter.</div>
+          <div className="Error-item">The required WebSocket connection cannot be established. Please check your firewall and router settings or contact your service provider for more information.</div>
         </SpatialNavigation>
       )
     } else if (this.state.rooms.length > 0) {
