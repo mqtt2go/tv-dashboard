@@ -289,14 +289,30 @@ h3 {
 }
 
 .Error-item{
-  color: #737373;
+  color: #1a1a1a;
   text-align: justify;
   max-width: 800px;
   outline: none;
   margin-bottom: 35px;
 }
 
+.Error-item:first-child{
+  margin-bottom: 0;
+}
+
 .Error-item img{
   width: 300px;
-  margin-bottom: 45px;
+  margin-bottom: 25px;
+}
+
+.Error-btn{
+  color: #ffffff;
+  background-color: #DA2A1D;
+  padding: 8px 25px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.Error-btn:focus{
+  font-weight: 400;
 }

@@ -435,11 +435,14 @@ class App extends Component {
     } else if (this.loadStatus === 'error') {
       return(
         <SpatialNavigation className="Error-wrap">
-          <Focusable className="Error-item" onKeyUp={(event) => this.hideMenuHandler(event)}>
+          <div className="Error-item">
             <img src="./ws_error.svg" alt="Error"/>
+          </div>
+          <div className="Error-item"><strong>Ups, da ist etwas schief gelaufen.</strong> Wahrscheinlich kann die benötigte WebSocket-Verbindung nicht aufgebaut werden. Bitte überprüfen Sie Ihre Firewall- und Router-Einstellungen oder wenden Sie sich an Ihren Dienstanbieter.</div>
+          <div className="Error-item"><strong>Ooops, something went wrong.</strong> Probably the required WebSocket connection cannot be established. Please check your firewall and router settings or contact your service provider.</div>
+          <Focusable className="Error-item" onKeyUp={(event) => this.hideMenuHandler(event)}>
+            <div className="Error-btn">Zurück • Back</div>
           </Focusable>
-          <div className="Error-item">Die erforderliche WebSocket-Verbindung kann nicht hergestellt werden. Bitte prüfen sie ihre Firewall- und Routereinstellungen oder wenden Sie sich für weitere Informationen an Ihren Dienstanbieter.</div>
-          <div className="Error-item">The required WebSocket connection cannot be established. Please check your firewall and router settings or contact your service provider for more information.</div>
         </SpatialNavigation>
       )
     } else if (this.state.rooms.length > 0) {
