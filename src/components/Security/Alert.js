@@ -12,7 +12,7 @@ const alert = (props) => {
         if (props.menuVisible){
             return(
                 <Control element={"Modal-Menu"}>
-                    <div className={classes.AlertMenu + (props.showAlert ? ' show' : ' hide')} onKeyUp={(event) => props.hideMenu(event)}>
+                    <div ref={props.modalRef} className={'modal-menu'} onKeyUp={(event) => props.hideMenu(event)}>
                         <h1 className={classes.Title}>Anomaly Report</h1>
                         <FocusableSection sectionId='alert-menu'
                                         neighborUp=''

@@ -45,17 +45,6 @@
     border: none;
 }
 
-.ActivityMenu{
-    position: fixed;
-    height: 100vh;
-    width: 100vw;
-    left: 0;
-    top: 0;
-    background-color: #e0e0e0;
-    text-align: center;
-    transition: transform .3s ease;
-}
-
 .Title{
     color: #1a1a1a;
     margin: 50px;

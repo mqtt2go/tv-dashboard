@@ -1,6 +1,6 @@
 
 import React from 'react';
-import classes from './Device.module.css';
+import classes from './Light.module.css';
 import { Focusable, FocusableSection } from 'react-js-spatial-navigation';
 import Control from '../../Control';
 
@@ -66,7 +66,7 @@ const light = (props) => {
         if (props.menuVisible){
             return(
                     <Control element={"Modal-Menu"}>
-                        <div className={classes.LightMenu + (props.showAlert ? ' show' : ' hide')} onKeyUp={(event) => props.hideMenu(event, props.item.id, props.room)}>
+                        <div ref={props.modalRef} className={'modal-menu'} onKeyUp={(event) => props.hideMenu(event, props.item.id, props.room)}>
                             <h1 className={classes.Title}>{props.item.name}</h1>
                                 <FocusableSection sectionId='buttons'
                                     neighborUp=''

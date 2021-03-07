@@ -8,6 +8,7 @@ import Alert from '../components/Security/Alert';
 import Activity from '../components/Activity/Activity';
 import Devices from '../components/Devices/Devices';
 import Control from '../components/Control';
+import Discovery from '../components/ServiceDiscovery/Discovery';
 import SpatialNavigation, { Focusable, FocusableSection } from 'react-js-spatial-navigation';
 
 
@@ -41,41 +42,24 @@ class App extends Component {
 
   menuVisible = false;
   selectedItem = null;
-  alertMsg = null;
-  update = true;
+  //update = true;
   lastSelected = null;
   cameraTimer = null;
   loadStatus = 'loading';
+  
+  modalRef = React.createRef();
 
-  componentDidUpdate(){
-    if (this.selectedItem){
-         setTimeout(() => {
-             const el = document.querySelector('.menu-active');
-             if(el){
-                 el.focus();
-             }
-         }, 50);
-     }
-    if (this.alertMsg){
-        setTimeout(() => {
-          const el = document.querySelector('.alert-active');
-            if(el){
-                el.focus();
-            }
-        }, 50);
-      }
-  }
-
-  eventsHandler = (value) => {
+  eventsHandler = (value) => {  
     const alerts = [...this.state['alert']];
     const activities = [...this.state['activities']];
-
 
     if (activities.length > 2){
       activities.pop();
     }
+
     activities.unshift({timestamp: +new Date() / 1000, message: value['message']});
     this.setState({'activities': activities});
+
 
     const idx = alerts.findIndex(item => {
       return item.event_name === value['event_name'];
@@ -84,8 +68,8 @@ class App extends Component {
     if (idx === -1) return;
     alerts[idx] = value;
     alerts[idx]['timestamp'] = +new Date();
-    if (value['status'] === 'alert') this.alertMsg = value['message'];
-    this.setState({'alert': alerts});
+    if (value['status'] === 'alert') this.setState({alertMsg: value['message']});
+    this.setState({alert: alerts});
   }
 
   changeStateHandler = (id, type, value) => {
@@ -208,9 +192,6 @@ class App extends Component {
             window.history.back();
           }
         } else if(event.state['home'] === true){
-          const modal = document.querySelector('.show');
-          modal.classList.remove('show');
-          modal.classList.add('hide');
           this.selectedItem = null;
           this.switchFocusable(false, true);
           this.activities = [];
@@ -222,7 +203,7 @@ class App extends Component {
       }
   }
 
-  shouldComponentUpdate(){
+  /*shouldComponentUpdate(){
     if (this.menuVisible === true && this.alertMsg){
       return true;
     }
@@ -230,7 +211,7 @@ class App extends Component {
       return false;
     }
     return true;
-  }
+  }*/
 
   enterSelectedHandler = (event, id) => {
 
@@ -283,30 +264,21 @@ class App extends Component {
   }
 
   hideAlert(){
-    this.alertMsg = null;
-    this.update = true;
-    const modal = document.querySelector('.show-alert');
-    modal.classList.remove('show-alert');
-    const el = document.querySelector('.menu-active');
-    if (el){
-      el.focus();
+    this.setState({alertMsg: null})
+    console.log(this.modalRef.current);
+    if (this.modalRef.current){
+      this.modalRef.current.querySelector('.menu-active').focus();
     } else{
       this.lastSelected.focus();
     }
-    this.forceUpdate();
   }
 
   
   getAlert(){
-    if(this.alertMsg){
-      setTimeout(() => {
-        const modal = document.querySelector('.Alert');
-        modal.classList.add('show-alert');
-        this.update = false;
-      }, 50);
+    if(this.state.alertMsg){
       return(
         <Control element={"Alert-Msg"}>
-          <FocusableSection sectionId="alert-modal" className={"Alert hide-alert"}
+          <FocusableSection sectionId="alert-modal" className={"Alert"}
               neighborUp=''
               neighborDown=''
               neighborLeft=''
@@ -314,7 +286,7 @@ class App extends Component {
             <img className="Warning-Icon" src={process.env.PUBLIC_URL + '/warning.svg'} alt='warning'></img>
             <div className="Alert-Wrap">
               <p className="Alert-Title">Alert!</p>
-              <div className="Alert-Msg">{this.alertMsg}</div>
+              <div className="Alert-Msg">{this.state.alertMsg}</div>
               <Focusable className="Alert-Btn alert-active" onClickEnter={(event) => this.hideAlert()}>Close</Focusable>
             </div>
           </FocusableSection>
@@ -389,15 +361,12 @@ class App extends Component {
     window.history.replaceState({'home': true}, null, window.location.pathname);
     window.history.pushState({'home': true}, null, window.location.pathname + 'menu');
 
-    setTimeout(() => {
-      const modal = document.querySelector('.hide');
-      modal.classList.remove('hide');
-      modal.classList.add('show');
-      const el = document.querySelector('.menu-active');
-      if(el){
-          el.focus();
-      }
-      }, 50);
+    console.log(item);
+    if (item.type === 'camera'){
+      this.sendMQTTChange(item.id, 'stream', 'stream', 'GET_STREAM');
+    }
+    //console.log(this.modalRef.current);
+    this.modalRef.current.querySelector('.menu-active').focus();
   }
 
   switchHomeHandler = (home) => {
@@ -436,7 +405,7 @@ class App extends Component {
       return(
         <SpatialNavigation className="Error-wrap">
           <div className="Error-item">
-            <img src="./ws_error.svg" alt="Error"/>
+            <img src={process.env.PUBLIC_URL + '/ws_error.svg'} alt="Error"/>
           </div>
           <div className="Error-item"><strong>Ups, da ist etwas schief gelaufen.</strong> Wahrscheinlich kann die benötigte WebSocket-Verbindung nicht aufgebaut werden. Bitte überprüfen Sie Ihre Firewall- und Router-Einstellungen oder wenden Sie sich an Ihren Dienstanbieter.</div>
           <div className="Error-item"><strong>Ooops, something went wrong.</strong> Probably the required WebSocket connection cannot be established. Please check your firewall and router settings or contact your service provider.</div>
@@ -472,23 +441,31 @@ class App extends Component {
                       focusHandler={this.focused}/>
                   <Alert status={this.state.alert}
                       alerts={this.state.alert}
+                      modalRef={this.modalRef}
                       enterClicked={this.enterShowHandler}
                       menuVisible={this.selectedItem === 'alert' ? true : false}
                       focusHandler={this.focused}
-                      showAlert={this.alertMsg ? true : false}
+                      showAlert={this.state.alertMsg ? true : false}
                       sendBack={this.backHandler}
                       showMenu={this.showMenuHandler}
                       hideMenu={this.hideMenuHandler}/>
+                  <Discovery
+                    modalRef={this.modalRef}
+                    showMenu={this.showMenuHandler}
+                    menuVisible={this.selectedItem === 'discovery' ? true : false}
+                    hideMenu={this.hideMenuHandler}
+                    focusHandler={this.focused}
+                  />
                 </FocusableSection>
               </div>
               <div className="Activity">
                 <h3>Activity</h3>
                 <div className="Wrap">
                   <Activity
+                    modalRef={this.modalRef}
                     activities={this.state.activities}
                     longActivities={this.activities}
                     menuVisible={this.selectedItem === 'activity' ? true : false}
-                    showAlert={this.alertMsg ? true : false}
                     hideMenu={this.hideMenuHandler}
                     focusHandler={this.focused}
                     sendBack={this.backHandler}
@@ -500,6 +477,8 @@ class App extends Component {
               <h3>Rooms</h3>
               <div className="Row">
                 <Devices rooms={this.state.rooms}
+                    modalRef={this.modalRef}
+                    showMenu={this.showMenuHandler}
                     setChange={this.commitChange}
                     menuChange={this.switchFocusable}
                     mqttChange={this.sendMQTTChange}
@@ -508,8 +487,7 @@ class App extends Component {
                     lastSelectHandler={this.setLastSelected}
                     selectedItem={this.selectedItem}
                     selectedHandler={this.setSelected}
-                    sendBack={this.backHandler}
-                    showAlert={this.alertMsg ? true : false}/>
+                    sendBack={this.backHandler}/>
                 <div className="Camera-Btn">
                   <img src={process.env.PUBLIC_URL + '/camera.svg'} alt='camera_icon'/>
                   <p>See all..</p>
