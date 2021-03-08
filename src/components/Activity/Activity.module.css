@@ -2,12 +2,14 @@
 
 .Time {
     color: #DA2A1D;
-    margin: 30px 20px 5px 20px;
+    padding: 20px 20px 5px 20px;
+    margin: 0;
 }
 
 .Message{
     color: #1a1a1a;
-    margin: 5px 20px 15px 20px;
+    padding: 5px 20px 15px 20px;
+    margin: 0;
 }
 
 .Activity {
@@ -29,16 +31,19 @@
 }
 
 .Row {
-    margin: 4px 20px;
+    margin: 0 20px;
     border-bottom: 1px solid #979797;
+    transition: background .1s linear;
+    border-radius: 2px;
 }
 
-.Row:focus{
-    box-sizing: border-box;
+.Row:focus, .Row:last-child:focus{
+    /*box-sizing: border-box;*/
     outline: none;
-    border: 4px solid #DA2A1D;
-    transform: scale(1.02);
-    transition: transform .3s ease;
+    border-right: 4px solid #DA2A1D;
+    /*transform: scale(1.02);
+    transition: transform .3s ease;*/
+    background-color: #FFFFFF;
 }
 
 .Row:last-child{

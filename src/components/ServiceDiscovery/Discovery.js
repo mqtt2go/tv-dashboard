@@ -8,7 +8,8 @@ class Discovery extends Component {
 
     state = {}
     loaded = 0;
-    txtRecords = {path: 'Path',product: 'Product Name',  provider: 'Provider', version: 'Version'};
+    mainItems = [{key: 'ipv4', name: 'IPv4'}, {key: 'ipv6', name: 'IPv6'}, {key: 'port', name: 'Port'}, {key: 'name', name: 'Name'}, { key: 'domain', name: 'Domain'},
+                 { key: 'host', name: 'Host'}, {key: 'type', name: 'Service Type'}, { key: 'subtype', name: 'Service Subtype'}]
     showRight = false;
     serviceAvailable = true;
 
@@ -158,32 +159,29 @@ class Discovery extends Component {
                     neighborLeft='@detail-services'
                     neighborRight=''
                     className={classes.RightPanel + ' ' + (this.showRight ? classes.Show : classes.Hide)}>
-                        <>
-                            <p className={classes.InfoHead}>IPv4</p>
-                            <p className={classes.InfoValue}>{service.ipv4}</p>
-                            {service.ipv6 ? <><p className={classes.InfoHead}>IPv6</p><p className={classes.InfoValue}>{service.ipv6}</p></> : <></>}
-                            <p className={classes.InfoHead}>Port</p>
-                            <p className={classes.InfoValue}>{service.port}</p>
-                            <p className={classes.InfoHead}>Name</p>
-                            <p className={classes.InfoValue}>{service.name}</p>
-                            <p className={classes.InfoHead}>Domain</p>
-                            <p className={classes.InfoValue}>{service.domain}</p>
-                            {service.host ? <><p className={classes.InfoHead}>Host</p><p className={classes.InfoValue}>{service.host}</p></> : <></>}
-                            <p className={classes.InfoHead}>Service Type</p>
-                            <p className={classes.InfoValue}>{service.type}</p>
-                            {service.subtype ? <><p className={classes.InfoHead}>Service Sub-Type</p><p className={classes.InfoValue}>{service.subtype}</p></> : <></>}
+                        <div className={classes.Frame}>
+                            {this.mainItems.map((item, idx) => {
+                                if (service[item.key]){
+                                    return(
+                                        <Focusable className={classes.DetailRow} key={'detail_' + idx}>
+                                            <p className={classes.InfoHead}>{item.name}</p>
+                                            <p className={classes.InfoValue}>{service[item.key]}</p>
+                                        </Focusable>
+                                    )
+                                } else return(null)
+                            })}
                             {Object.keys(service.record).map((item) => {
                                 return(
-                                    <div key={item}>
+                                    <Focusable className={classes.DetailRow} key={item}>
                                         <p className={classes.InfoHead}>{item}</p>
                                         <p className={classes.InfoValue}>{service.record[item]}</p>
-                                     </div>
+                                    </Focusable>
                                 )
                             })}
                             <div className={classes.BtnWrap}>
-                                <Focusable className={classes.Btn} onClickEnter={this.openLink} onKeyUp={(event) => this.props.hideMenu(event)}>Open</Focusable>
+                                <Focusable key={'open_btn'} className={classes.Btn} onClickEnter={this.openLink} onKeyUp={(event) => this.props.hideMenu(event)}>Open</Focusable>
                             </div>
-                        </>
+                        </div>
                 </FocusableSection>
             )
         }
