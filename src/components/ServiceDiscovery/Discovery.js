@@ -7,23 +7,33 @@ import classes from './Discovery.module.css';
 class Discovery extends Component {
 
     state = {}
-    loaded = false;
+    loaded = 0;
     txtRecords = {path: 'Path',product: 'Product Name',  provider: 'Provider', version: 'Version'};
     showRight = false;
     serviceAvailable = true;
 
+    componentDidMount() {
+        window.addEventListener('beforeunload', () => {
+            console.log('Unregistering service');
+        })
+    }
+
     parseData(data){
         const services = {};
         data.forEach(service => {
-            const node = {name: service.name, domain: service.domain, host: service.hostName, ipv4: service.addresses.ipv4, ipv6: service.addresses.ipv6,
-                          type: service.type, subtype: service.subtype, port: service.port, record: service.properties};
+            const node = {name: service.name, domain: service.domainName, host: service.hostName, ipv4: service.addresses.ipv4, ipv6: service.addresses.ipv6,
+                          type: service.service.type, subtype: service.service.subtype, port: service.service.port, record: service.service.txtRecord};
             if (service.addresses.ipv4 in services){
                 services[service.addresses.ipv4].push(node);
             } else {
                 services[service.addresses.ipv4] = [node];
             }
         });
-       this.setState({services: services, selIdx: 0, detailIdx: 0});
+        if ('services' in this.state){
+            this.setState({services: services});
+        } else {
+            this.setState({services: services, selIdx: 0, detailIdx: 0});
+        }
     }
 
     loadData() {
@@ -68,9 +78,10 @@ class Discovery extends Component {
     }
 
     componentDidUpdate(){
-        if (this.loaded === false){
+        if (Date.now() - this.loaded > 60 * 1000){
             this.loadData();
-            this.loaded = true;
+            this.loaded = Date.now();
+            console.log('Data Loaded');
         }
     }
 

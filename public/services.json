@@ -2,56 +2,86 @@
     "message": "Success",
     "services": [
         {
-            "name": "Fran's MacBook Pro._flametouch._tcp.local.",
+            "name": "Fran's MacBook Pro._rfb._tcp.local.",
+            "hostName": "frans-mbp.fritz.box",
+            "domainName": "Frans-MacBook-Pro.local.",
             "addresses": {
                 "ipv4": "192.168.178.58",
                 "ipv6": "fe80::1893:e42f:9c41:1427"
             },
-            "type": "_flametouch._tcp.local.",
-            "port": 1812,
-            "domain": "Frans-MacBook-Pro.local.",
-            "properties": {}
+            "service": {
+                "type": "_rfb._tcp.local.",
+                "port": 5900,
+                "txtRecord": {}
+            }
         },
         {
-            "name": "Fran's MacBook Pro._rfb._tcp.local.",
+            "name": "Fran's MacBook Pro._flametouch._tcp.local.",
+            "hostName": "frans-mbp.fritz.box",
+            "domainName": "Frans-MacBook-Pro.local.",
             "addresses": {
                 "ipv4": "192.168.178.58",
                 "ipv6": "fe80::1893:e42f:9c41:1427"
             },
-            "type": "_rfb._tcp.local.",
-            "port": 5900,
-            "domain": "Frans-MacBook-Pro.local.",
-            "properties": {}
+            "service": {
+                "type": "_flametouch._tcp.local.",
+                "port": 1812,
+                "txtRecord": {}
+            }
         },
         {
             "name": "Fran's MacBook Pro._companion-link._tcp.local.",
+            "hostName": "frans-mbp.fritz.box",
+            "domainName": "Frans-MacBook-Pro.local.",
             "addresses": {
                 "ipv4": "192.168.178.58",
                 "ipv6": "fe80::1893:e42f:9c41:1427"
             },
-            "type": "_companion-link._tcp.local.",
-            "port": 65087,
-            "domain": "Frans-MacBook-Pro.local.",
-            "properties": {
-                "rpHN": "9e1adcee7a1e",
-                "rpFl": "0x20000",
-                "rpVr": "220.9",
-                "rpHA": "7df6b718e186",
-                "rpAD": "309f7ab6b65b",
-                "rpHI": "7b74f9eecee0",
-                "rpBA": "55:B5:C0:53:40:E2"
+            "service": {
+                "type": "_companion-link._tcp.local.",
+                "port": 52302,
+                "txtRecord": {
+                    "rpHN": "ea3631d21ccf",
+                    "rpFl": "0x20000",
+                    "rpVr": "220.9",
+                    "rpHA": "de02795ba8d2",
+                    "rpAD": "0fc369402b1f",
+                    "rpHI": "54cf5d8e4ee2",
+                    "rpBA": "A6:D1:00:91:44:DB"
+                }
             }
         },
         {
             "name": "myservice._mqtt._tcp.local.",
+            "hostName": "raspberrypi.fritz.box",
+            "domainName": "raspberrypi.local.",
             "addresses": {
-               "ipv4": "192.168.178.178",
-               "ipv6": "fe80::ec47:5f4d:3fc5:1ad2"
+                "ipv4": "192.168.178.178",
+                "ipv6": "fe80::ec47:5f4d:3fc5:1ad2"
             },
-            "type": "_mqtt._tcp.local.",
-            "port": 1883,
-            "domain": "raspberrypi.local.",
-            "properties": {}
+            "service": {
+                "type": "_mqtt._tcp.local.",
+                "port": 1883,
+                "txtRecord": {}
+            }
+        },
+        {
+            "name": "Emily\u2019s MacBook Air._companion-link._tcp.local.",
+            "hostName": "emilys-air-2.fritz.box",
+            "domainName": "Emilys-MacBook-Air-2.local.",
+            "addresses": {
+                "ipv4": "192.168.178.106",
+                "ipv6": "fe80::142e:509d:cd38:a908"
+            },
+            "service": {
+                "type": "_companion-link._tcp.local.",
+                "port": 54020,
+                "txtRecord": {
+                    "rpBA": "9E:90:4C:93:8A:47",
+                    "rpFl": "0x0",
+                    "rpVr": "120.48"
+                }
+            }
         }
     ]
 }
