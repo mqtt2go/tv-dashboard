@@ -1,86 +1,60 @@
 {
-    "message": "Success",
     "services": [
         {
-            "name": "Fran's MacBook Pro._rfb._tcp.local.",
-            "hostName": "frans-mbp.fritz.box",
-            "domainName": "Frans-MacBook-Pro.local.",
+            "id": 1,
+            "name": "turris._ssh._tcp.local.",
+            "hostName": null,
+            "domainName": "turris.local.",
             "addresses": {
-                "ipv4": "192.168.178.58",
-                "ipv6": "fe80::1893:e42f:9c41:1427"
+                "ipv4": [
+                    "192.168.42.1"
+                ],
+                "ipv6": [
+                    "fe80::6f0:21ff:fe45:c747"
+                ]
             },
             "service": {
-                "type": "_rfb._tcp.local.",
-                "port": 5900,
+                "type": "_ssh._tcp.local.",
+                "port": 22,
                 "txtRecord": {}
             }
         },
         {
-            "name": "Fran's MacBook Pro._flametouch._tcp.local.",
-            "hostName": "frans-mbp.fritz.box",
-            "domainName": "Frans-MacBook-Pro.local.",
+            "id": 2,
+            "name": "Brno._home-assistant._tcp.local.",
+            "hostName": null,
+            "domainName": "Brno._home-assistant._tcp.local.",
             "addresses": {
-                "ipv4": "192.168.178.58",
-                "ipv6": "fe80::1893:e42f:9c41:1427"
+                "ipv4": [
+                    "192.168.42.172"
+                ],
+                "ipv6": []
             },
             "service": {
-                "type": "_flametouch._tcp.local.",
-                "port": 1812,
-                "txtRecord": {}
-            }
-        },
-        {
-            "name": "Fran's MacBook Pro._companion-link._tcp.local.",
-            "hostName": "frans-mbp.fritz.box",
-            "domainName": "Frans-MacBook-Pro.local.",
-            "addresses": {
-                "ipv4": "192.168.178.58",
-                "ipv6": "fe80::1893:e42f:9c41:1427"
-            },
-            "service": {
-                "type": "_companion-link._tcp.local.",
-                "port": 52302,
+                "type": "_home-assistant._tcp.local.",
+                "port": 8123,
                 "txtRecord": {
-                    "rpHN": "ea3631d21ccf",
-                    "rpFl": "0x20000",
-                    "rpVr": "220.9",
-                    "rpHA": "de02795ba8d2",
-                    "rpAD": "0fc369402b1f",
-                    "rpHI": "54cf5d8e4ee2",
-                    "rpBA": "A6:D1:00:91:44:DB"
+                    "version": "0.105.5",
+                    "base_url": "http://192.168.42.172:8123",
+                    "requires_api_password": "true"
                 }
             }
         },
         {
-            "name": "myservice._mqtt._tcp.local.",
-            "hostName": "raspberrypi.fritz.box",
-            "domainName": "raspberrypi.local.",
+            "id": 3,
+            "name": "MQTT2GO._mqtt._tcp.local.",
+            "hostName": null,
+            "domainName": "MQTT2GO.local.",
             "addresses": {
-                "ipv4": "192.168.178.178",
-                "ipv6": "fe80::ec47:5f4d:3fc5:1ad2"
+                "ipv4": [
+                    "192.168.42.172"
+                ],
+                "ipv6": []
             },
             "service": {
                 "type": "_mqtt._tcp.local.",
-                "port": 1883,
+                "port": 8883,
                 "txtRecord": {}
-            }
-        },
-        {
-            "name": "Emily\u2019s MacBook Air._companion-link._tcp.local.",
-            "hostName": "emilys-air-2.fritz.box",
-            "domainName": "Emilys-MacBook-Air-2.local.",
-            "addresses": {
-                "ipv4": "192.168.178.106",
-                "ipv6": "fe80::142e:509d:cd38:a908"
-            },
-            "service": {
-                "type": "_companion-link._tcp.local.",
-                "port": 54020,
-                "txtRecord": {
-                    "rpBA": "9E:90:4C:93:8A:47",
-                    "rpFl": "0x0",
-                    "rpVr": "120.48"
-                }
             }
         }
     ]

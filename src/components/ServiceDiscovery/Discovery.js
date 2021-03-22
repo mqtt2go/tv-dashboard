@@ -6,6 +6,7 @@ import classes from './Discovery.module.css';
 
 class Discovery extends Component {
 
+    serviceName = 'TV Dashboard._http._tcp.local.';
     state = {}
     loaded = 0;
     mainItems = [{key: 'ipv4', name: 'IPv4'}, {key: 'ipv6', name: 'IPv6'}, {key: 'port', name: 'Port'}, {key: 'name', name: 'Name'}, { key: 'domain', name: 'Domain'},
@@ -15,7 +16,8 @@ class Discovery extends Component {
 
     componentDidMount() {
         window.addEventListener('beforeunload', () => {
-            console.log('Unregistering service');
+            this.deleteService();
+            //console.log('Unregistering service');
         })
     }
 
@@ -37,45 +39,66 @@ class Discovery extends Component {
         }
     }
 
-    loadData() {
-        /*fetch(process.env.PUBLIC_URL + '/zeroconf', {
-           method: 'post',
-           body: JSON.stringify(
-               {
-                   name: 'TV Dashboard at ' + window.location.hostname,
-                   replaceWildcards: true,
-                   serviceProtocol: 'any',
-                   service: {
-                       type: '_http._tcp',
-                       subtype: '_mqtt2go._http._tcp',
-                       port: 9,
-                       txtRecord: {
-                           version: '1.0',
-                           provider: 'A1 Telekom Austria Group',
-                           product: 'A1 Service Discovery'
-                       }
-                   }
-               }
-           ) 
-        }).then(response => {
-            if (!response.ok){
-                throw new Error('Service Discovery not available');
-            }
-            fetch(process.env.PUBLIC_URL + '/services.json')
+    requestServices(){
+        fetch('http://' + window.location.hostname + ':55555/v1/zeroconf')
             .then(res => res.json())
             .then(results => {
-                this.parseData(results);
+                console.log(results.services);
+                if (results.services.length > 0){
+                    this.parseData(results.services);
+                }
+            }).catch(error => {
+                console.log(error);
+                this.serviceAvailable = false;
             })
-        }).catch(error => {
-            console.log(error);
-            this.serviceAvailable = false;
-        })*/
+    }
 
-        fetch(process.env.PUBLIC_URL + '/services.json')
+    deleteService(){
+        navigator.sendBeacon('http://' + window.location.hostname + ':55555/v1/zeroconf/' + this.serviceName);
+    }
+
+    loadData() {
+        if (!('services' in this.state))
+        {
+            fetch('http://' + window.location.hostname + ':55555/v1/zeroconf', {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(
+                {
+                    name: this.serviceName,
+                    replaceWildcards: false,
+                    serviceProtocol: 'any',
+                    service: {
+                        type: '_http._tcp.local.',
+                        subtype: '_mqtt2go._http._tcp.local.',
+                        port: 9999,
+                        txtRecord: {
+                            version: '1.0',
+                            provider: 'A1 Telekom Austria Group',
+                            product: 'A1 Service Discovery'
+                        }
+                    }
+                }
+            ) 
+            }).then(response => {
+                if (!response.ok){
+                    throw new Error('Service Discovery not available');
+                }
+                this.requestServices();
+            })
+            .catch(error => {
+                console.log(error);
+                this.serviceAvailable = false;
+            })
+        } else {
+            this.requestServices();
+        }
+
+        /*fetch(process.env.PUBLIC_URL + '/services.json')
         .then(res => res.json())
         .then(results => {
             this.parseData(results.services);
-        })
+        })*/
     }
 
     componentDidUpdate(){
@@ -161,7 +184,7 @@ class Discovery extends Component {
                     className={classes.RightPanel + ' ' + (this.showRight ? classes.Show : classes.Hide)}>
                         <div className={classes.Frame}>
                             {this.mainItems.map((item, idx) => {
-                                if (service[item.key]){
+                                if (service[item.key] && service[item.key].length > 0){
                                     return(
                                         <Focusable className={classes.DetailRow} key={'detail_' + idx}>
                                             <p className={classes.InfoHead}>{item.name}</p>
@@ -269,6 +292,7 @@ class Discovery extends Component {
         return (
             <Focusable className={classes.Item}
                 onFocus={(event) => this.props.focusHandler(event)}
+                onKeyUp={(event) => this.props.sendBack(event)}
                 onClickEnter={(event) => this.props.showMenu(event, 'discovery')}>
                 <img src={process.env.PUBLIC_URL + '/cogwheel.svg'} alt='service_icon'/>
                 <p>Services</p>

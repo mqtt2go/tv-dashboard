@@ -160,6 +160,7 @@ class App extends Component {
     }
   }
 
+
   componentDidMount() {
     client.subscribe(`${this.homes[this.home_id].prefix}/devices/out`);
     client.subscribe(`${this.homes[this.home_id].prefix}/activities/out`);
@@ -202,16 +203,6 @@ class App extends Component {
         } 
       }
   }
-
-  /*shouldComponentUpdate(){
-    if (this.menuVisible === true && this.alertMsg){
-      return true;
-    }
-    if (this.menuVisible === true || this.update === false) {
-      return false;
-    }
-    return true;
-  }*/
 
   enterSelectedHandler = (event, id) => {
 
@@ -455,6 +446,7 @@ class App extends Component {
                     menuVisible={this.selectedItem === 'discovery' ? true : false}
                     hideMenu={this.hideMenuHandler}
                     focusHandler={this.focused}
+                    sendBack={this.backHandler}
                   />
                 </FocusableSection>
               </div>
