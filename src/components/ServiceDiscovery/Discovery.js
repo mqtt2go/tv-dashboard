@@ -12,7 +12,7 @@ class Discovery extends Component {
     mainItems = [{key: 'ipv4', name: 'IPv4'}, {key: 'ipv6', name: 'IPv6'}, {key: 'port', name: 'Port'}, {key: 'name', name: 'Name'}, { key: 'domain', name: 'Domain'},
                  { key: 'host', name: 'Host'}, {key: 'type', name: 'Service Type'}, { key: 'subtype', name: 'Service Subtype'}]
     showRight = false;
-    serviceAvailable = true;
+    serviceAvailable = false;
 
     componentDidMount() {
         window.addEventListener('beforeunload', () => {
@@ -25,11 +25,11 @@ class Discovery extends Component {
         const services = {};
         data.forEach(service => {
             const node = {name: service.name, domain: service.domainName, host: service.hostName, ipv4: service.addresses.ipv4, ipv6: service.addresses.ipv6,
-                          type: service.service.type, subtype: service.service.subtype, port: service.service.port, record: service.service.txtRecord};
-            if (service.addresses.ipv4 in services){
-                services[service.addresses.ipv4].push(node);
+                          type: service.service.type, subtype: service.service.subtype, port: String(service.service.port), record: service.service.txtRecord};
+            if (service.name in services){
+                services[service.name].push(node);
             } else {
-                services[service.addresses.ipv4] = [node];
+                services[service.name] = [node];
             }
         });
         if ('services' in this.state){
@@ -40,11 +40,12 @@ class Discovery extends Component {
     }
 
     requestServices(){
-        fetch('http://' + window.location.hostname + ':55555/v1/zeroconf')
+        fetch(/*'http://' + window.location.hostname + */'http://tv-dashboard.duckdns.org:55555/v1/zeroconf')
             .then(res => res.json())
             .then(results => {
-                console.log(results.services);
+                //console.log(results.services);
                 if (results.services.length > 0){
+                    this.serviceAvailable = true;
                     this.parseData(results.services);
                 }
             }).catch(error => {
@@ -54,13 +55,13 @@ class Discovery extends Component {
     }
 
     deleteService(){
-        navigator.sendBeacon('http://' + window.location.hostname + ':55555/v1/zeroconf/' + this.serviceName);
+        navigator.sendBeacon(/*'http://' + window.location.hostname + */'http://tv-dashboard.duckdns.org:55555/v1/zeroconf/' + this.serviceName);
     }
 
     loadData() {
         if (!('services' in this.state))
         {
-            fetch('http://' + window.location.hostname + ':55555/v1/zeroconf', {
+            fetch(/*'http://' + window.location.hostname + */'http://tv-dashboard.duckdns.org:55555/v1/zeroconf', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(
@@ -71,7 +72,7 @@ class Discovery extends Component {
                     service: {
                         type: '_http._tcp.local.',
                         subtype: '_mqtt2go._http._tcp.local.',
-                        port: 9999,
+                        port: 80,
                         txtRecord: {
                             version: '1.0',
                             provider: 'A1 Telekom Austria Group',
@@ -81,7 +82,7 @@ class Discovery extends Component {
                 }
             ) 
             }).then(response => {
-                if (!response.ok){
+                if (!response.ok && response.status !== 409){
                     throw new Error('Service Discovery not available');
                 }
                 this.requestServices();
@@ -147,6 +148,10 @@ class Discovery extends Component {
 
     getServices(){
         if ('services' in this.state){
+            if (this.state.selIdx > Object.keys(this.state.services).length) {
+                this.setState({selIdx: 0, detailIdx: 0});
+                return
+            }
             const service = this.state.services[Object.keys(this.state.services)[this.state.selIdx]];
             return (
                 <>
@@ -174,6 +179,16 @@ class Discovery extends Component {
 
     getServiceDetail(){
         if ('services' in this.state){
+            if (!Object.keys(this.state.services)[this.state.selIdx]) {
+                this.setState({selIdx: 0, detailIdx: 0});
+                return
+            }
+
+            if (Object.keys(this.state.services)[this.state.selIdx].length < this.state.detailIdx){
+                this.setState({detailIdx: 0});
+                return
+            }
+
             const service = this.state.services[Object.keys(this.state.services)[this.state.selIdx]][this.state.detailIdx];
             return(
                 <FocusableSection sectionId='detail-service'
@@ -183,6 +198,10 @@ class Discovery extends Component {
                     neighborRight=''
                     className={classes.RightPanel + ' ' + (this.showRight ? classes.Show : classes.Hide)}>
                         <div className={classes.Frame}>
+                            <div className={classes.BtnWrap}>
+                                <Focusable key={'open_btn'} className={classes.Btn} onClickEnter={this.openLink} onKeyUp={(event) => this.props.hideMenu(event)}>Open</Focusable>
+                            </div>
+                            <p className={classes.InfoTitle}>Core</p>
                             {this.mainItems.map((item, idx) => {
                                 if (service[item.key] && service[item.key].length > 0){
                                     return(
@@ -193,6 +212,8 @@ class Discovery extends Component {
                                     )
                                 } else return(null)
                             })}
+                            <br></br>
+                            <p className={classes.InfoTitle}>Data</p>
                             {Object.keys(service.record).map((item) => {
                                 return(
                                     <Focusable className={classes.DetailRow} key={item}>
@@ -201,9 +222,6 @@ class Discovery extends Component {
                                     </Focusable>
                                 )
                             })}
-                            <div className={classes.BtnWrap}>
-                                <Focusable key={'open_btn'} className={classes.Btn} onClickEnter={this.openLink} onKeyUp={(event) => this.props.hideMenu(event)}>Open</Focusable>
-                            </div>
                         </div>
                 </FocusableSection>
             )
@@ -266,6 +284,7 @@ class Discovery extends Component {
                                 neighborRight='@detail-services'
                                 className={classes.LeftPanel}>
                                     <div className={classes.Frame}>
+                                        <p className={classes.Address + ' ' + classes.TextCenter}>Hosts</p>
                                         {this.getNodes()}
                                     </div>
                             </FocusableSection>

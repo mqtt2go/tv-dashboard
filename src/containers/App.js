@@ -48,6 +48,7 @@ class App extends Component {
   loadStatus = 'loading';
   
   modalRef = React.createRef();
+  alertRef = React.createRef();
 
   eventsHandler = (value) => {  
     const alerts = [...this.state['alert']];
@@ -160,6 +161,11 @@ class App extends Component {
     }
   }
 
+  componentDidUpdate(){
+    if (this.alertRef.current){
+      this.alertRef.current.el.focus();
+    }
+  }
 
   componentDidMount() {
     client.subscribe(`${this.homes[this.home_id].prefix}/devices/out`);
@@ -278,7 +284,7 @@ class App extends Component {
             <div className="Alert-Wrap">
               <p className="Alert-Title">Alert!</p>
               <div className="Alert-Msg">{this.state.alertMsg}</div>
-              <Focusable className="Alert-Btn alert-active" onClickEnter={(event) => this.hideAlert()}>Close</Focusable>
+              <Focusable ref={this.alertRef} className="Alert-Btn" onClickEnter={(event) => this.hideAlert()}>Close</Focusable>
             </div>
           </FocusableSection>
         </Control>
@@ -352,7 +358,7 @@ class App extends Component {
     window.history.replaceState({'home': true}, null, window.location.pathname);
     window.history.pushState({'home': true}, null, window.location.pathname + 'menu');
 
-    console.log(item);
+    //console.log(item);
     if (item.type === 'camera'){
       this.sendMQTTChange(item.id, 'stream', 'stream', 'GET_STREAM');
     }
@@ -436,7 +442,7 @@ class App extends Component {
                       enterClicked={this.enterShowHandler}
                       menuVisible={this.selectedItem === 'alert' ? true : false}
                       focusHandler={this.focused}
-                      showAlert={this.state.alertMsg ? true : false}
+                      //showAlert={this.state.alertMsg ? true : false}
                       sendBack={this.backHandler}
                       showMenu={this.showMenuHandler}
                       hideMenu={this.hideMenuHandler}/>
