@@ -28,7 +28,7 @@ const options = {
     clientId: makeid(8)
   };
 
-const client = mqtt.connect('mqtt://tv-dashboard.duckdns.org:59001', options);
+const client = mqtt.connect(process.env.REACT_APP_MQTT_URL, options);
 
 
 class App extends Component {

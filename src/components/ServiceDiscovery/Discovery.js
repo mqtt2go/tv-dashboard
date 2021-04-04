@@ -6,6 +6,7 @@ import classes from './Discovery.module.css';
 
 class Discovery extends Component {
 
+    baseUrl = process.env.REACT_APP_DISCOVERY_URL;
     serviceName = 'TV Dashboard._http._tcp.local.';
     state = {}
     loaded = 0;
@@ -40,7 +41,7 @@ class Discovery extends Component {
     }
 
     requestServices(){
-        fetch(/*'http://' + window.location.hostname + */'http://tv-dashboard.duckdns.org:55555/v1/zeroconf')
+        fetch(this.baseUrl)
             .then(res => res.json())
             .then(results => {
                 //console.log(results.services);
@@ -55,13 +56,13 @@ class Discovery extends Component {
     }
 
     deleteService(){
-        navigator.sendBeacon(/*'http://' + window.location.hostname + */'http://tv-dashboard.duckdns.org:55555/v1/zeroconf/' + this.serviceName);
+        navigator.sendBeacon( this.baseUrl + '/' + this.serviceName);
     }
 
     loadData() {
         if (!('services' in this.state))
         {
-            fetch(/*'http://' + window.location.hostname + */'http://tv-dashboard.duckdns.org:55555/v1/zeroconf', {
+            fetch(this.baseUrl, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(
@@ -94,12 +95,6 @@ class Discovery extends Component {
         } else {
             this.requestServices();
         }
-
-        /*fetch(process.env.PUBLIC_URL + '/services.json')
-        .then(res => res.json())
-        .then(results => {
-            this.parseData(results.services);
-        })*/
     }
 
     componentDidUpdate(){
