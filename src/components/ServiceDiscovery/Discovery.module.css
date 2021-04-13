@@ -122,6 +122,17 @@
     font-size: 24px;
 }
 
+.ErrorCode, .ErrorMsg{
+    color: #1a1a1a;
+    text-align: justify;
+    width: 100%;
+    max-width: 800px;
+}
+
+.ErrorMsg{
+    margin-bottom: 25px;
+}
+
 .Frame{
     overflow: hidden;
     height: 100%;
