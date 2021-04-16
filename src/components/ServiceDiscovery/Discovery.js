@@ -44,11 +44,11 @@ class Discovery extends Component {
             .then(async res => {
                 const resp = await res.json();
                 if (!res.ok){
-                    return this.setState({ error: { code: resp.code, msg: resp.message, reason: resp.reason } });
+                    return this.setState({ error: { code: resp.code, msg: resp.message, reason: resp.reason, host: process.env.REACT_APP_DISCOVERY_URL } });
                 }
                 return this.parseData(resp.services);
             }).catch(error => {
-                return this.setState({error: {code: 'Unknown', msg: 'Error', reason: error.message}});
+                return this.setState({error: {code: 'Unknown', msg: 'Error', reason: error.message, host: process.env.REACT_APP_DISCOVERY_URL}});
             });
     }
 
@@ -57,7 +57,7 @@ class Discovery extends Component {
     }
 
     loadData() {
-        if (this.state.error === false || !('services' in this.state))
+        if (this.loaded === 0)
         {
             fetch(this.baseUrl, {
             method: 'post',
@@ -83,12 +83,12 @@ class Discovery extends Component {
             .then(response => response.json())
             .then(response => {
                 if (response.code !== 201 && response.code !== 409){
-                    return this.setState({error: {code: response.code, msg: response.message, reason: response.reason}});
+                    return this.setState({error: {code: response.code, msg: response.message, reason: response.reason, host: process.env.REACT_APP_DISCOVERY_URL}});
                 }
                 this.requestServices();
             })
             .catch(error => {
-                return this.setState({error: {code: 'Unknown', msg: 'Error', reason: error.message}});
+                return this.setState({error: {code: 'Unknown', msg: 'Error', reason: error.message, host: process.env.REACT_APP_DISCOVERY_URL}});
             })
         } else {
             this.requestServices();
@@ -96,10 +96,10 @@ class Discovery extends Component {
     }
 
     componentDidUpdate(){
-        if (Date.now() - this.loaded > 30 * 1000){
+        if (Date.now() - this.loaded > 5 * 1000){
             this.loadData();
             this.loaded = Date.now();
-            console.log('Data Loaded');
+            //console.log('Data Loaded');
         }
     }
 
@@ -170,6 +170,17 @@ class Discovery extends Component {
         }
     }
 
+
+    getButton(serv_type){
+        if (serv_type.includes('http')){
+            return(
+                <div className={classes.BtnWrap}>
+                    <Focusable key={'open_btn'} className={classes.Btn} onClickEnter={this.openLink} onKeyUp={(event) => this.props.hideMenu(event)}>Open</Focusable>
+                </div>
+            )
+        }
+    }
+
     getServiceDetail(){
         if ('services' in this.state){
             if (!Object.keys(this.state.services)[this.state.selIdx]) {
@@ -191,9 +202,7 @@ class Discovery extends Component {
                     neighborRight=''
                     className={classes.RightPanel + ' ' + (this.showRight ? classes.Show : classes.Hide)}>
                         <div className={classes.Frame}>
-                            <div className={classes.BtnWrap}>
-                                <Focusable key={'open_btn'} className={classes.Btn} onClickEnter={this.openLink} onKeyUp={(event) => this.props.hideMenu(event)}>Open</Focusable>
-                            </div>
+                            {this.getButton(service['type'])}
                             <p className={classes.InfoTitle}>Core</p>
                             {this.mainItems.map((item, idx) => {
                                 if (service[item.key] && service[item.key].length > 0){
@@ -247,6 +256,7 @@ class Discovery extends Component {
                                     </div>
                                     <div className="Error-item"><strong>Ups, da ist etwas schief gelaufen.</strong> Wahrscheinlich fehlt das Zeroconfiguration Networking Service. Bitte wenden Sie sich an den Gerätehersteller oder an Ihren Dienstanbieter.</div>
                                     <div className="Error-item"><strong>Ooops, something went wrong.</strong> Probably the Zeroconfiguration Networking Service is missing. Please contact the device manufacturer or your service provider.</div>
+                                    <div className={classes.ErrorCode}><strong>Host:</strong> {this.state.error.host}</div>
                                     <div className={classes.ErrorCode}><strong>Code:</strong> {this.state.error.code}</div>
                                     <div className={classes.ErrorMsg}><strong>{this.state.error.msg}:</strong> {this.state.error.reason}</div>
                                     <Focusable className="Error-item menu-active" onKeyUp={(event) => this.props.hideMenu(event, false)}>
