@@ -174,7 +174,7 @@ h3 {
 
 .modal-menu{
   position: fixed;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   left: 0;
   top: 0;
@@ -190,7 +190,7 @@ h3 {
 }
 
 .spinner{
-  height: 100vh;
+  min-height: 100vh;
   transform: translateY(35%);
 }
 
@@ -293,7 +293,7 @@ h3 {
 }
 
 .Error-wrap{
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;

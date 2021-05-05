@@ -73,7 +73,7 @@ class Discovery extends Component {
                         port: 80,
                         txtRecord: {
                             version: '1.0',
-                            provider: 'A1 Telekom Austria Group',
+                        provider: 'A1 Telekom Austria Group',
                             product: 'A1 Service Discovery'
                         }
                     }
@@ -259,7 +259,7 @@ class Discovery extends Component {
                                     <div className={classes.ErrorCode}><strong>Host:</strong> {this.state.error.host}</div>
                                     <div className={classes.ErrorCode}><strong>Code:</strong> {this.state.error.code}</div>
                                     <div className={classes.ErrorMsg}><strong>{this.state.error.msg}:</strong> {this.state.error.reason}</div>
-                                    <Focusable className="Error-item menu-active" onKeyUp={(event) => this.props.hideMenu(event, false)}>
+                                    <Focusable className="Error-item menu-active" onKeyUp={(event) => this.props.hideMenu(event, true)}>
                                         <div className="Error-btn">Zurück • Back</div>
                                     </Focusable>
                                 </FocusableSection>
@@ -278,7 +278,7 @@ class Discovery extends Component {
                                 neighborDown=''
                                 neighborLeft=''
                                 neighborRight=''>
-                                <Focusable className={classes.Back} onKeyUp={(event) => this.props.hideMenu(event, false)}>
+                                <Focusable className={classes.Back} onKeyUp={(event) => this.props.hideMenu(event, true)}>
                                     <img alt="back" src={process.env.PUBLIC_URL + '/back.svg'}/>
                                 </Focusable>
                             </FocusableSection>
