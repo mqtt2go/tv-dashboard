@@ -110,7 +110,7 @@
     width: 80%;
     display: flex;
     justify-content: center;
-    height: 70%;
+    height: 75vh;
 }
 
 .ErrorWrap{
@@ -158,6 +158,10 @@
     padding: 2px 4px;
     border-radius: 2px;
     transition: background .1s linear;
+}
+
+.DetailRow:last-of-type, .Row:last-of-type{
+    margin-bottom: 80px;
 }
 
 .DetailRow:focus{

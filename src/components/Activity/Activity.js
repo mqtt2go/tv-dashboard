@@ -43,7 +43,8 @@ const activity = (props) => {
                             <div className={classes.Frame}>
                                 {data.map((activity, idx) => {
                                     return(
-                                        <Focusable className={classes.Row + (idx === 0 ? ' menu-active' : '')} key={idx}>
+                                        <Focusable className={classes.Row + (idx === 0 ? ' menu-active' : '')} key={idx}
+                                            onFocus={(event) => {event.target.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'center'})}}>
                                             <p className={classes.Time}>{getTimeValue(activity.timestamp)}</p>
                                             <p className={classes.Message} >{activity.message}</p>
                                         </Focusable>

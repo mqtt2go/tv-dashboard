@@ -7,7 +7,7 @@ import classes from './Discovery.module.css';
 class Discovery extends Component {
 
     baseUrl = process.env.REACT_APP_DISCOVERY_URL;
-    serviceName = 'TV Dashboard._http._tcp.local.';
+    serviceName = 'TV Dashboard';
     state = {error: {code: 'Unknown', msg: 'Error', reason: 'Failed to fetch'}};
     loaded = 0;
     mainItems = [{key: 'ipv4', name: 'IPv4'}, {key: 'ipv6', name: 'IPv6'}, {key: 'port', name: 'Port'}, {key: 'name', name: 'Name'}, { key: 'domain', name: 'Domain'},
@@ -65,15 +65,15 @@ class Discovery extends Component {
             body: JSON.stringify(
                 {
                     name: this.serviceName,
-                    replaceWildcards: false,
+                    replaceWildcards: true,
                     serviceProtocol: 'any',
                     service: {
-                        type: '_http._tcp.local.',
-                        subtype: '_mqtt2go._http._tcp.local.',
-                        port: 80,
+                        type: '_http._tcp',
+                        subtype: '_mqtt2go._sub._http._tcp',
+                        port: 9,
                         txtRecord: {
                             version: '1.0',
-                        provider: 'A1 Telekom Austria Group',
+                            provider: 'A1 Telekom Austria Group',
                             product: 'A1 Service Discovery'
                         }
                     }
@@ -107,6 +107,7 @@ class Discovery extends Component {
         if ('services' in this.state){
             this.showRight = false;
             this.setState({selIdx: idx, detailIdx: 0});
+            event.target.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'center'});
         }
     }
 
@@ -114,6 +115,7 @@ class Discovery extends Component {
         if ('services' in this.state){
             this.showRight = true;
             this.setState({detailIdx: idx});
+            event.target.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'center'});
         }
     }
 
@@ -207,7 +209,8 @@ class Discovery extends Component {
                             {this.mainItems.map((item, idx) => {
                                 if (service[item.key] && service[item.key].length > 0){
                                     return(
-                                        <Focusable className={classes.DetailRow} key={'detail_' + idx}>
+                                        <Focusable className={classes.DetailRow} key={'detail_' + idx}
+                                            onFocus={(event) => {event.target.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'center'})}}>
                                             <p className={classes.InfoHead}>{item.name}</p>
                                             <p className={classes.InfoValue}>{service[item.key]}</p>
                                         </Focusable>
@@ -218,7 +221,8 @@ class Discovery extends Component {
                             <p className={classes.InfoTitle}>Data</p>
                             {Object.keys(service.record).map((item) => {
                                 return(
-                                    <Focusable className={classes.DetailRow} key={item}>
+                                    <Focusable className={classes.DetailRow} key={item}
+                                        onFocus={(event) => {event.target.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'center'})}}>
                                         <p className={classes.InfoHead}>{item}</p>
                                         <p className={classes.InfoValue}>{service.record[item]}</p>
                                     </Focusable>
@@ -278,7 +282,7 @@ class Discovery extends Component {
                                 neighborDown=''
                                 neighborLeft=''
                                 neighborRight=''>
-                                <Focusable className={classes.Back} onKeyUp={(event) => this.props.hideMenu(event, true)}>
+                                <Focusable className={classes.Back} onKeyUp={(event) => this.props.hideMenu(event, false)}>
                                     <img alt="back" src={process.env.PUBLIC_URL + '/back.svg'}/>
                                 </Focusable>
                             </FocusableSection>
