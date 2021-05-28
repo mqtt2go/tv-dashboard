@@ -28,3 +28,70 @@ The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+
+# Service Discovery
+When the TV Dashboard is launched, the application is automatically registered to Zeroconf/Avahi service discovery system. Conversely, when the application is closed, the service is unregistered. The service is registered as *TV Dashboard* on port *9* with the type *_http._tcp* (subtype *_mqtt2go._sub._http._tcp*).
+
+## Service Registration format
+
+```
+ [POST] http://<server>:<port>/a1/xploretv/v1/zeroconf
+```
+
+```json {cmd=node .line-numbers}
+{
+   "name":"TV Dashboard",
+   "replaceWildcards":true,
+   "serviceProtocol":"any",
+   "service":{
+      "type":"_http._tcp",
+      "subtype":"_mqtt2go._sub._http._tcp",
+      "port":9,
+      "txtRecord":{
+         "version":"1.0",
+         "provider":"A1 Telekom Austria Group",
+         "product":"A1 Service Discovery"
+      }
+   }
+}
+```
+
+## Service Deregistration
+
+```
+[POST/DELETE] http://<server>:<port>/a1/xploretv/v1/zeroconf/TV Dashboard
+```
+
+## Service Response
+
+```
+[GET] http://<server>:<port>/a1/xploretv/v1/zeroconf
+```
+
+```json
+[
+    {...},
+    {
+        "name":"TV Dashboard",
+        "hostName":"raspberrypi.",
+        "domainName":"raspberrypi.",
+        "addresses":{
+        "ipv4":[
+            "127.0.0.1"
+        ],
+        "ipv6":[]
+        },
+        "service":{
+            "type":"_mqtt2go._sub._http._tcp.local.",
+            "port":9,
+            "txtRecord":{
+                "version":"1.0",
+                "provider":"A1 Telekom Austria Group",
+                "product":"A1 Service Discovery"
+            }
+        }
+    },
+    {...}
+]
+```
