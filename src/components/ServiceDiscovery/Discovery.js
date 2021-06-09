@@ -263,7 +263,7 @@ class Discovery extends Component {
                                     <div className={classes.ErrorCode}><strong>Host:</strong> {this.state.error.host}</div>
                                     <div className={classes.ErrorCode}><strong>Code:</strong> {this.state.error.code}</div>
                                     <div className={classes.ErrorMsg}><strong>{this.state.error.msg}:</strong> {this.state.error.reason}</div>
-                                    <Focusable className="Error-item menu-active" onKeyUp={(event) => this.props.hideMenu(event, true)}>
+                                    <Focusable className="Error-item menu-active" onKeyUp={(event) => this.props.hideMenu(event, false)}>
                                         <div className="Error-btn">Zurück • Back</div>
                                     </Focusable>
                                 </FocusableSection>
