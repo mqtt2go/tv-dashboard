@@ -26,10 +26,10 @@ class Discovery extends Component {
         data.forEach(service => {
             const node = {name: service.name, domain: service.domainName, host: service.hostName, ipv4: service.addresses.ipv4, ipv6: service.addresses.ipv6,
                           type: service.service.type, subtype: service.service.subtype, port: String(service.service.port), record: service.service.txtRecord};
-            if (service.name in services){
-                services[service.name].push(node);
+            if (service.hostName in services){
+                services[service.hostName].push(node);
             } else {
-                services[service.name] = [node];
+                services[service.hostName] = [node];
             }
         });
         if ('services' in this.state){
@@ -132,8 +132,10 @@ class Discovery extends Component {
                     <Focusable className={classes.Row + (idx === 0 ? ' menu-active' : '')} key={idx}
                         onFocus={(event) => this.changeIdx(event, idx)}
                         onKeyUp={(event) => this.props.hideMenu(event)}>
-                        <p className={classes.Name}>{this.state.services[key][0].name}</p>
-                        <p className={classes.Address}>{this.state.services[key][0].ipv4}</p>
+                        <p className={classes.Name}>{this.state.services[key][0].host.replace(/(.local.$|.$)/i, '')}</p>
+                        <p className={classes.Address}>{this.state.services[key][0].ipv4}
+                        <span className={classes.Number}> ({this.state.services[key].length === 1 ? 'One service' : this.state.services[key].length + ' services'})</span>
+                        </p>
                     </Focusable>
                 )
             })
