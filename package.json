@@ -10,7 +10,6 @@
     "mqtt": "^4.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-hls-player": "^1.0.2",
     "react-js-spatial-navigation": "git+https://github.com/chwagssd/react-js-spatial-navigation.git",
     "react-scripts": "3.4.1"
   },

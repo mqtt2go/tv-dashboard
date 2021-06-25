@@ -74,7 +74,8 @@ class Discovery extends Component {
                         txtRecord: {
                             version: '1.0',
                             provider: 'A1 Telekom Austria Group',
-                            product: 'A1 Service Discovery'
+                            product: 'A1 Service Discovery',
+                            path:  window.location.protocol + '//' + window.location.hostname + ':' + window.location.port,
                         }
                     }
                 }
@@ -121,12 +122,18 @@ class Discovery extends Component {
 
     openLink = () => {
         const service = this.state.services[Object.keys(this.state.services)[this.state.selIdx]][this.state.detailIdx];
-        const url = 'http://' + service['ipv4'] + ':' + String(service['port']) + (service.record['path'] ? service.record['path'] : '');
+        let url = "";
+        if (service.record['path'] && service.record['path'].startsWith('http')){
+            url = service.record['path'];
+        } else {
+            url = 'http://' + service['ipv4'] + ':' + String(service['port']) + (service.record['path'] ? service.record['path'] : '');
+        }
         window.open(url, '_blank');
     }
 
     getNodes(){
         if ('services' in this.state){
+
             return (Object.keys(this.state.services).map((key, idx) => {
                 return(
                     <Focusable className={classes.Row + (idx === 0 ? ' menu-active' : '')} key={idx}
@@ -145,11 +152,12 @@ class Discovery extends Component {
 
     getServices(){
         if ('services' in this.state){
+            let index = this.state.selIdx;
             if (this.state.selIdx > Object.keys(this.state.services).length) {
-                this.setState({selIdx: 0, detailIdx: 0});
-                return
+                index = 0;
             }
-            const service = this.state.services[Object.keys(this.state.services)[this.state.selIdx]];
+
+            const service = this.state.services[Object.keys(this.state.services)[index]];
             return (
                 <>
                     <p className={classes.Address}>Address</p>
@@ -187,17 +195,13 @@ class Discovery extends Component {
 
     getServiceDetail(){
         if ('services' in this.state){
-            if (!Object.keys(this.state.services)[this.state.selIdx]) {
-                this.setState({selIdx: 0, detailIdx: 0});
+            let index = this.state.detailIdx;
+            if (this.state.services[Object.keys(this.state.services)[this.state.selIdx]].length < index + 1){
+                index = 0;
                 return
             }
 
-            if (Object.keys(this.state.services)[this.state.selIdx].length < this.state.detailIdx){
-                this.setState({detailIdx: 0});
-                return
-            }
-
-            const service = this.state.services[Object.keys(this.state.services)[this.state.selIdx]][this.state.detailIdx];
+            const service = this.state.services[Object.keys(this.state.services)[this.state.selIdx]][index];
             return(
                 <FocusableSection sectionId='detail-service'
                     neighborUp=''
