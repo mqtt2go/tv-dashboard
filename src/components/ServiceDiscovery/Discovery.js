@@ -70,7 +70,7 @@ class Discovery extends Component {
                     service: {
                         type: '_http._tcp',
                         subtype: '_mqtt2go._sub._http._tcp',
-                        port: 9,
+                        port: parseInt(window.location.port),
                         txtRecord: {
                             version: '1.0',
                             provider: 'A1 Telekom Austria Group',
@@ -140,7 +140,7 @@ class Discovery extends Component {
                         onFocus={(event) => this.changeIdx(event, idx)}
                         onKeyUp={(event) => this.props.hideMenu(event)}>
                         <p className={classes.Name}>{this.state.services[key][0].host.replace(/(.local.$|.$)/i, '')}</p>
-                        <p className={classes.Address}>{this.state.services[key][0].ipv4}
+                        <p className={classes.Address}>{this.state.services[key][0].ipv4[0]}
                         <span className={classes.Number}> ({this.state.services[key].length === 1 ? 'One service' : this.state.services[key].length + ' services'})</span>
                         </p>
                     </Focusable>
@@ -162,8 +162,12 @@ class Discovery extends Component {
                 <>
                     <p className={classes.Address}>Address</p>
                     <p className={classes.Name}>{service[0].host}</p>
-                    <p className={classes.Name}>{service[0].ipv4}</p>
-                    {service[0].ipv6 ? <p className={classes.Name}>{service[0].ipv6}</p> : <></>}
+                    {service[0].ipv4.map((ip, idx) => {
+                        return(<p key={'ipv4-' + idx} className={classes.Name}>{ip}</p>)
+                    })}
+                    {service[0].ipv6.map((ip, idx) => {
+                        return(<p key={'ipv6-' + idx} className={classes.Name}>{ip}</p>)
+                    })}
                     <div className={classes.InfoWrap}>
                         <p className={classes.Address}>Services</p>
                         {service.map((ser, idx) => {
@@ -193,6 +197,16 @@ class Discovery extends Component {
         }
     }
 
+    getDetailValue(service, item){
+        if (Array.isArray(service[item.key])){
+            return (service[item.key].map((it, idx) => {
+                return(<p key={item.key + '-' + idx} className={classes.InfoValue}>{it}</p>)
+            }))
+        } else {
+            return(<p className={classes.InfoValue}>{service[item.key]}</p>)
+        }
+    }
+
     getServiceDetail(){
         if ('services' in this.state){
             let index = this.state.detailIdx;
@@ -218,7 +232,7 @@ class Discovery extends Component {
                                         <Focusable className={classes.DetailRow} key={'detail_' + idx}
                                             onFocus={(event) => {event.target.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'center'})}}>
                                             <p className={classes.InfoHead}>{item.name}</p>
-                                            <p className={classes.InfoValue}>{service[item.key]}</p>
+                                            {this.getDetailValue(service, item)}
                                         </Focusable>
                                     )
                                 } else return(null)
