@@ -126,7 +126,7 @@ class Discovery extends Component {
         if (service.record['path'] && service.record['path'].startsWith('http')){
             url = service.record['path'];
         } else {
-            url = 'http://' + service['ipv4'] + ':' + String(service['port']) + (service.record['path'] ? service.record['path'] : '');
+            url = 'http://' + service['ipv4'][0] + ':' + String(service['port']) + (service.record['path'] ? service.record['path'] : '');
         }
         window.open(url, '_blank');
     }
