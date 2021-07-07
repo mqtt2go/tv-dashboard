@@ -120,17 +120,6 @@ class Discovery extends Component {
         }
     }
 
-    openLink = () => {
-        const service = this.state.services[Object.keys(this.state.services)[this.state.selIdx]][this.state.detailIdx];
-        let url = "";
-        if (service.record['path'] && service.record['path'].startsWith('http')){
-            url = service.record['path'];
-        } else {
-            url = 'http://' + service['ipv4'][0] + ':' + String(service['port']) + (service.record['path'] ? service.record['path'] : '');
-        }
-        window.open(url, '_blank');
-    }
-
     getNodes(){
         if ('services' in this.state){
 
@@ -186,14 +175,27 @@ class Discovery extends Component {
         }
     }
 
+    getLink(service, ip){
+        let url = "";
+        if (service.record['path'] && service.record['path'].startsWith('http')){
+            url = service.record['path'];
+        } else {
+            url = 'http://' + ip + ':' + String(service['port']) + (service.record['path'] ? service.record['path'] : '');
+        }
+        return url;
+    }
 
-    getButton(serv_type){
-        if (serv_type.includes('http')){
-            return(
-                <div className={classes.BtnWrap}>
-                    <Focusable key={'open_btn'} className={classes.Btn} onClickEnter={this.openLink} onKeyUp={(event) => this.props.hideMenu(event)}>Open</Focusable>
-                </div>
-            )
+    getButton(service){
+        if (service['type'].includes('http')){
+            return(service['ipv4'].map((ip, idx) => {
+                return(
+                    <div className={classes.BtnWrap} key={'open_btn-' + idx}>
+                        <Focusable className={classes.Btn} onClickEnter={() => {window.open(this.getLink(service, ip), '_blank')}}>
+                            {service['ipv4'].length > 1 ? 'Open (' + idx +')': 'Open'}
+                        </Focusable>
+                    </div>
+                )
+            }))
         }
     }
 
@@ -224,7 +226,7 @@ class Discovery extends Component {
                     neighborRight=''
                     className={classes.RightPanel + ' ' + (this.showRight ? classes.Show : classes.Hide)}>
                         <div className={classes.Frame}>
-                            {this.getButton(service['type'])}
+                            {this.getButton(service)}
                             <p className={classes.InfoTitle}>Core</p>
                             {this.mainItems.map((item, idx) => {
                                 if (service[item.key] && service[item.key].length > 0){
