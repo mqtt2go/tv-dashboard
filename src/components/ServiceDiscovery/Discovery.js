@@ -69,7 +69,7 @@ class Discovery extends Component {
                     serviceProtocol: 'any',
                     service: {
                         type: '_http._tcp',
-                        subtype: '_mqtt2go._sub._http._tcp',
+                        /*subtype: '_mqtt2go._sub._http._tcp',*/
                         port: parseInt(window.location.port),
                         txtRecord: {
                             version: '1.0',

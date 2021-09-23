@@ -240,7 +240,7 @@ class App extends Component {
   }
 
   updateCameraImage(){
-    //if (this.menuVisible || this.alertMsg) return;
+    if (this.menuVisible || this.alertMsg) return;
     const rooms = [...this.state['rooms']];
     rooms.forEach((room) => {
       room['devices'].forEach((device) =>{
