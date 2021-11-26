@@ -73,8 +73,8 @@ class Discovery extends Component {
                         port: parseInt(window.location.port),
                         txtRecord: {
                             version: '1.0',
-                            provider: 'A1 Telekom Austria Group',
-                            product: 'A1 Service Discovery',
+                            provider: 'A1 Telekom Austria',
+                            product: 'Xplore TV-Dashboard',
                             path:  window.location.protocol + '//' + window.location.hostname + ':' + window.location.port,
                         }
                     }
