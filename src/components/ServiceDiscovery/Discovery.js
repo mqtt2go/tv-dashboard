@@ -69,13 +69,14 @@ class Discovery extends Component {
                     serviceProtocol: 'any',
                     service: {
                         type: '_http._tcp',
+                        ip: window.location.hostname,
                         /*subtype: '_mqtt2go._sub._http._tcp',*/
-                        port: parseInt(window.location.port),
+                        port: 80/*parseInt(window.location.port)*/,
                         txtRecord: {
                             version: '1.0',
                             provider: 'A1 Telekom Austria',
                             product: 'Xplore TV-Dashboard',
-                            path:  window.location.protocol + '//' + window.location.hostname + ':' + window.location.port,
+                            path:  window.location.protocol + '//' + window.location.hostname/* + ':' + window.location.port*/,
                         }
                     }
                 }
@@ -143,6 +144,8 @@ class Discovery extends Component {
         if ('services' in this.state){
             let index = this.state.selIdx;
             if (this.state.selIdx > Object.keys(this.state.services).length) {
+                this.state.selIdx = 0;
+                this.state.detailIdx = 0;
                 index = 0;
             }
 
@@ -212,10 +215,6 @@ class Discovery extends Component {
     getServiceDetail(){
         if ('services' in this.state){
             let index = this.state.detailIdx;
-            if (this.state.services[Object.keys(this.state.services)[this.state.selIdx]].length < index + 1){
-                index = 0;
-                return
-            }
 
             const service = this.state.services[Object.keys(this.state.services)[this.state.selIdx]][index];
             return(
