@@ -69,14 +69,13 @@ class Discovery extends Component {
                     serviceProtocol: 'any',
                     service: {
                         type: '_http._tcp',
-                        ip: window.location.hostname,
                         /*subtype: '_mqtt2go._sub._http._tcp',*/
                         port: 80/*parseInt(window.location.port)*/,
                         txtRecord: {
                             version: '1.0',
                             provider: 'A1 Telekom Austria',
                             product: 'Xplore TV-Dashboard',
-                            path:  window.location.protocol + '//' + window.location.hostname/* + ':' + window.location.port*/,
+                            path:  '/',
                         }
                     }
                 }
