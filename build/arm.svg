@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="53px" height="53px" viewBox="0 0 53 53" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <desc>Created with Lunacy</desc>
+  <g id="Armed_icon" transform="translate(2.5 2.5)">
+    <path d="M0 16L24 0L48 16L48 48L0 48L0 16Z" id="Rectangle" fill="none" stroke="#95B5C5" stroke-width="5" />
+    <path d="M0 0L23 1.84668e-13L23 9L21 17L2 17L0 9L0 0Z" transform="translate(12 23)" id="Rectangle" fill="#95B5C5" stroke="none" />
+    <path d="M3 0L14 0L17 3.5L17 9L15 9L15 4.5L13 2L4 2L2 4.5L2 9L0 9L0 3.5L3 0Z" transform="translate(15 14)" id="Rectangle" fill="#95B5C5" stroke="none" />
+  </g>
+</svg>

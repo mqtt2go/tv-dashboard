@@ -1,0 +1,61 @@
+{
+    "services": [
+        {
+            "id": 1,
+            "name": "turris._ssh._tcp.local.",
+            "hostName": null,
+            "domainName": "turris.local.",
+            "addresses": {
+                "ipv4": [
+                    "192.168.42.1"
+                ],
+                "ipv6": [
+                    "fe80::6f0:21ff:fe45:c747"
+                ]
+            },
+            "service": {
+                "type": "_ssh._tcp.local.",
+                "port": 22,
+                "txtRecord": {}
+            }
+        },
+        {
+            "id": 2,
+            "name": "Brno._home-assistant._tcp.local.",
+            "hostName": null,
+            "domainName": "Brno._home-assistant._tcp.local.",
+            "addresses": {
+                "ipv4": [
+                    "192.168.42.172"
+                ],
+                "ipv6": []
+            },
+            "service": {
+                "type": "_home-assistant._tcp.local.",
+                "port": 8123,
+                "txtRecord": {
+                    "version": "0.105.5",
+                    "base_url": "http://192.168.42.172:8123",
+                    "requires_api_password": "true"
+                }
+            }
+        },
+        {
+            "id": 3,
+            "name": "MQTT2GO._mqtt._tcp.local.",
+            "hostName": null,
+            "domainName": "MQTT2GO.local.",
+            "addresses": {
+                "ipv4": [
+                    "192.168.42.172"
+                ],
+                "ipv6": []
+            },
+            "service": {
+                "type": "_mqtt._tcp.local.",
+                "port": 8883,
+                "txtRecord": {}
+            }
+        }
+    ]
+}
