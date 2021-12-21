@@ -31,12 +31,12 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 
 # Service Discovery
-When the TV Dashboard is launched, the application is automatically registered to Zeroconf/Avahi service discovery system. Conversely, when the application is closed, the service is unregistered. The service is registered as *TV Dashboard* on port *9* with the type *_http._tcp* (subtype *_mqtt2go._sub._http._tcp*).
+When the TV Dashboard is launched, the application is automatically registered to Zeroconf/Avahi service discovery system. Conversely, when the application is closed, the service is unregistered. The service is registered as *TV Dashboard* on port *58000* with the type *_http._tcp*.
 
 ## Service Registration format
 
 ```
- [POST] http://<server>:<port>/a1/xploretv/v1/zeroconf
+ [POST] http://zeroconf:15051/a1/xploretv/v1/zeroconf
 ```
 
 ```json {cmd=node .line-numbers}
@@ -46,12 +46,12 @@ When the TV Dashboard is launched, the application is automatically registered t
    "serviceProtocol":"any",
    "service":{
       "type":"_http._tcp",
-      "subtype":"_mqtt2go._sub._http._tcp",
-      "port":9,
+      "port":58000,
       "txtRecord":{
          "version":"1.0",
-         "provider":"A1 Telekom Austria Group",
-         "product":"A1 Service Discovery"
+         "provider":"A1 Telekom Austria",
+         "product":"Xplore TV-Dashboard"
+         "path":"/"
       }
    }
 }
@@ -60,22 +60,22 @@ When the TV Dashboard is launched, the application is automatically registered t
 ## Service Deregistration
 
 ```
-[POST/DELETE] http://<server>:<port>/a1/xploretv/v1/zeroconf/TV Dashboard
+[POST/DELETE] http://zeroconf:15051/a1/xploretv/v1/zeroconf/TV Dashboard
 ```
 
 ## Service Response
 
 ```
-[GET] http://<server>:<port>/a1/xploretv/v1/zeroconf
+[GET] http://zeroconf:15051/a1/xploretv/v1/zeroconf
 ```
 
 ```json
 [
     {...},
     {
-        "name":"TV Dashboard",
-        "hostName":"raspberrypi.",
-        "domainName":"raspberrypi.",
+        "name":"TV Dashboard at raspberrypi",
+        "hostName":"raspberrypi.local.",
+        "domainName":"local",
         "addresses":{
         "ipv4":[
             "127.0.0.1"
@@ -83,15 +83,26 @@ When the TV Dashboard is launched, the application is automatically registered t
         "ipv6":[]
         },
         "service":{
-            "type":"_mqtt2go._sub._http._tcp.local.",
-            "port":9,
+            "type":"_http._tcp.local.",
+            "port":58000,
             "txtRecord":{
                 "version":"1.0",
-                "provider":"A1 Telekom Austria Group",
-                "product":"A1 Service Discovery"
+                "provider":"A1 Telekom Austria",
+                "product":"Xplore TV-Dashboard"
+                "path":"/"
             }
         }
     },
     {...}
 ]
 ```
+
+# File Server Deployment
+
+The folder *script* contains automatic installation scripts for Raspberry Pi and OpenWrt devices. Launching the file *install.sh* as the root user *(sudo install.sh)* automatically installs all dependencies to the system and copies files necessary for the TV dashboard to appropriate folders. Notably, the script applies only to *Debian-based* systems. Finally, the TV Dashboard can be accessed on address *http://{localhost/device_ip}/>:58000*.<br />
+
+The installation on OpenWrt devices requires additional prerequisites. Before the actual installation, the LXC container named *tvdasboard* must be present in the system. Then the installation process follows the same steps. Emitting the *install-owrt.sh* command available in *scripts* folder, all dependencies are installed to the system. Finally, the TV Dashboard can be accessed on address *http://tvdashboard:58000*.
+
+# Kiosk Mode Installation
+
+TBD
