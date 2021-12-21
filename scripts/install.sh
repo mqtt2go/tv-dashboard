@@ -31,8 +31,10 @@ echo "Done."
 
 echo "Copying files..."
 
-chmod -R 755 /var/www/html
 rm -rf /var/www/html
+mkdir /var/www/html
+
+chmod -R 755 /var/www/html
 
 cp -R ../build/* /var/www/html
 echo "Done."
