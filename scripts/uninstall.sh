@@ -5,7 +5,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )
 
 launcher="${parent_path}/launcherTV.sh"
 
@@ -30,8 +30,8 @@ rm -rf /var/www/html
 
 remove_cronjob
 
-python3 stop.py
+python3 ./stop.py
 
-rm -R $parent_path  2>&1 > /dev/null
+rm -R "${parent_path}"  2>&1 > /dev/null
 
 echo "Done."

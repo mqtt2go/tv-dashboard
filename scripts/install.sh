@@ -52,6 +52,8 @@ if [ $? -eq 0 ]
        add_cronjob
 fi
 
+service lighttpd reload
+
 python3 "${parent_path}/start.py"
 
 echo "Done."
