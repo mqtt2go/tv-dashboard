@@ -7,7 +7,7 @@ fi
 
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
-launcher="${parent_path}/launcher.sh"
+launcher="${parent_path}/launcherTV.sh"
 
 add_cronjob () { 
     echo "Adding TV Dashboard as a cronjob"
@@ -25,7 +25,7 @@ echo "Done."
 
 echo "Updating port..."
 
-lxc-attach -n "${container}" -- sed -i 's/server.port .*/server.port = 58000/g' '/etc/lighttpd/lighttpd.conf'
+sed -i 's/server.port .*/server.port = 58000/g' '/etc/lighttpd/lighttpd.conf'
 
 echo "Done."
 
