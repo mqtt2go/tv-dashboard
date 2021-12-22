@@ -211,6 +211,10 @@
     margin: 4px 2px;
 }
 
+.Break{
+    line-break: anywhere;
+}
+
 .BtnWrap{
     /*position: absolute;
     bottom: 0;

@@ -143,8 +143,7 @@ class Discovery extends Component {
         if ('services' in this.state){
             let index = this.state.selIdx;
             if (this.state.selIdx > Object.keys(this.state.services).length) {
-                this.state.selIdx = 0;
-                this.state.detailIdx = 0;
+                this.setState({selIdx: 0, detailIdx: 0});
                 index = 0;
             }
 
@@ -280,7 +279,7 @@ class Discovery extends Component {
                                     </div>
                                     <div className="Error-item"><strong>Ups, da ist etwas schief gelaufen.</strong> Wahrscheinlich fehlt das Zeroconfiguration Networking Service. Bitte wenden Sie sich an den Gerätehersteller oder an Ihren Dienstanbieter.</div>
                                     <div className="Error-item"><strong>Ooops, something went wrong.</strong> Probably the Zeroconfiguration Networking Service is missing. Please contact the device manufacturer or your service provider.</div>
-                                    <div className={classes.ErrorCode}><strong>Host:</strong> {this.state.error.host}</div>
+                                    <div className={classes.ErrorCode + ' ' + classes.Break}><strong>Host:</strong> {this.state.error.host}</div>
                                     <div className={classes.ErrorCode}><strong>Code:</strong> {this.state.error.code}</div>
                                     <div className={classes.ErrorMsg}><strong>{this.state.error.msg}:</strong> {this.state.error.reason}</div>
                                     <Focusable className="Error-item menu-active" onKeyUp={(event) => this.props.hideMenu(event, false)}>
