@@ -105,4 +105,16 @@ The installation on OpenWrt devices requires additional prerequisites. Before th
 
 # Kiosk Mode Installation
 
-TBD
+For the Raspberry Pi kiosk mode installation, following parts are needed:
+
+ 1. Raspberry Pi 3B or higher (to ensure quality experience from the chrome browser).
+ 2. MicroSD card big enough to store current version of Raspberry Pi OS Lite (currently 4GB minimum)
+ 3. Kiosk installation script provided in this repo.
+
+## Installation steps
+
+1.  Install Raspberry Pi OS Lite to the microSD card. This can be done utilizing the Raspberry Pi Imager software.
+2.  Copy the installation script to the micdoSD card – ideally via ssh to booted systems’ home directory and run it as sudo.
+3.  Wait for the script to finish and then reboot the device.
+
+Optionally a custom modification to the RPi can be done – changing usernames and logins to enhance security etc. If the sole purpose of Kiosk Mode installation is only to verify the functionality, this can be omitted. In all other scenarios we strongly recommend securing the device.
