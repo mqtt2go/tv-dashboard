@@ -11,7 +11,7 @@ def main():
         print('Server not available ...Exiting')
         exit(-1)
     if r.status_code == 200:
-        payload = {'name': 'File Server',
+        payload = {'name': 'TV Dashboard',
                    'replaceWildcards': True,
                    'serviceProtocol': 'any',
                    'service': {
@@ -21,7 +21,7 @@ def main():
                            'version': '1.0',
                            'provider': 'A1 Telekom Austria',
                            'product': 'TV-Dashboard File Server',
-                           'path': 'http://tvdashboard:58000'
+                           'path': 'http://fileserver:58000'
                             }
                         }
                    }
