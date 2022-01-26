@@ -21,7 +21,18 @@ sudo echo '--check-for-update-interval=31536000' >> /etc/xdg/openbox/autostart
 sudo chmod 755 /etc/xdg/openbox/environment
 #Add KIOSK_URL to the openbox environment
 sudo chmod 777 /etc/xdg/openbox/environment
-sudo echo 'export KIOSK_URL=http://tvdashboard:58000/' >> /etc/xdg/openbox/environment
+read -e -p "Do you want to change default kiosk URL? (Options: y|Y, <address>) " choice
+case ${choice:0:1} in
+    y|Y )
+        echo "Proceeding with default kiosk URL."
+        sudo echo 'export KIOSK_URL=http://tvdashboard:58000/' >> /etc/xdg/openbox/environment
+    ;;
+    * ) 
+       echo "Setting $choice as default kiosk URL."
+       sudo echo 'export KIOSK_URL=$choice' >> /etc/xdg/openbox/environment
+    ;;
+esac
+
 sudo chmod 755 /etc/xdg/openbox/autostart
 #Make sure the xserver start on boot
 FILE=/home/pi/.bash_profile
@@ -111,6 +122,17 @@ sudo cec-client | ./control.sh' >> $START
 sudo chmod 775 $START
 fi
 (crontab -l 2>/dev/null; echo "@reboot /home/pi/start.sh") | crontab -
+
+read -e -p "Do you want to install File Server? (Options: y|Y, n|N) " choice
+case ${choice:0:1} in
+    y|Y )
+        echo "Proceeding with File Server installation"
+        sudo ./install.sh
+    ;;
+    n|N ) 
+       echo "Skipping File Server installation!"
+    ;;
+esac
 
 sudo apt-get install --no-install-recommends realvnc-vnc-server 
 sudo raspi-config nonint do_vnc 0

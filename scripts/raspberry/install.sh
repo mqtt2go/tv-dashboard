@@ -48,12 +48,12 @@ if [ $? -eq 0 ]
     else
        echo "Adding job to crontab..."
        touch "${launcher}"
-       printf '#!/bin/sh\n\nsudo python3 %s/start.py' "${parent_path}" > "${launcher}"
+       printf '#!/bin/sh\n\nsudo python3 %s/../system/start.py' "${parent_path}" > "${launcher}"
        add_cronjob
 fi
 
 service lighttpd reload
 
-python3 "${parent_path}/start.py"
+python3 "${parent_path}/../system/start.py"
 
 echo "Done."

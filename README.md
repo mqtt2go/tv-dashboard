@@ -51,7 +51,8 @@ When the TV Dashboard is launched, the application is automatically registered t
          "version":"1.0",
          "provider":"A1 Telekom Austria",
          "product":"Xplore TV-Dashboard"
-         "path":"/"
+         "path":"/",
+         "virtualHost":true
       }
    }
 }
@@ -89,7 +90,8 @@ When the TV Dashboard is launched, the application is automatically registered t
                 "version":"1.0",
                 "provider":"A1 Telekom Austria",
                 "product":"Xplore TV-Dashboard"
-                "path":"/"
+                "path":"/",
+                "virtualHost":true
             }
         }
     },
@@ -97,11 +99,29 @@ When the TV Dashboard is launched, the application is automatically registered t
 ]
 ```
 
-# File Server Deployment
+# File Server Deployment - Raspberry PI
 
-The folder *script* contains automatic installation scripts for Raspberry Pi and OpenWrt devices. Launching the file *install.sh* as the root user *(sudo install.sh)* automatically installs all dependencies to the system and copies files necessary for the TV dashboard to appropriate folders. Notably, the script applies only to *Debian-based* systems. Finally, the TV Dashboard can be accessed on address *http://{localhost/device_ip}/>:58000*.<br />
+The folder *scripts* contains automatic installation scripts for Raspberry Pi and OpenWrt devices. Notably, the raspberry script applies only to *Debian-based* systems. Finally, the TV Dashboard can be accessed on address *http://{hostname/device_ip}/>:58000* within the local area network.<br />
 
-The installation on OpenWrt devices requires additional prerequisites. Before the actual installation, the LXC container named *tvdasboard* must be present in the system. Then the installation process follows the same steps. Emitting the *install-owrt.sh* command available in *scripts* folder, all dependencies are installed to the system. Finally, the TV Dashboard can be accessed on address *http://tvdashboard:58000*.
+## Intallation Steps
+
+1. Clone git repository *https://github.com/mqtt2go/tv-dashboard.git*.
+2. Switch to *<repository>/scripts/raspberry* folder.
+3. Change installation script permissions *chmod 755 install.sh*.
+4. Launch installation script as root user *sudo ./install.sh*.
+
+# File Server Deployment - OpenWRT
+
+The installation on OpenWrt devices requires additional prerequisites. Before the actual installation, the LXC container named *fileserver* must be present in the system. Then the installation process follows the same steps. ONce installed , the TV Dashboard can be accessed on address *http://tvdashboard:58000*.
+
+## Installation Steps
+1. Install *fileserver* LXC container vi web user interface.
+2. Connect via SSH to the OpenWRT device.
+3. Attach to the LXC by emmitting *lxc-attach -n fileserver*
+4. Clone git repository *https://github.com/mqtt2go/tv-dashboard.git*.
+5. Switch to *<repository>/scripts/openwrt* folder.
+6. Change installation script permissions *chmod 755 install-owrt.sh*.
+7. Launch installation script as root user *sudo ./install-owrt.sh*.
 
 # Kiosk Mode Installation
 

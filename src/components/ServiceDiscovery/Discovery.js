@@ -76,6 +76,7 @@ class Discovery extends Component {
                             provider: 'A1 Telekom Austria',
                             product: 'Xplore TV-Dashboard',
                             path:  '/',
+                            virtualHost: 'true'
                         }
                     }
                 }
@@ -187,7 +188,7 @@ class Discovery extends Component {
     }
 
     getButton(service){
-        if (service['type'].includes('http')){
+        if (service['type'].includes('http') && service['record']['virtualHost'] !== 'true'){
             return(service['ipv4'].map((ip, idx) => {
                 return(
                     <div className={classes.BtnWrap} key={'open_btn-' + idx}>

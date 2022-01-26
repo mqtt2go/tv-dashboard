@@ -48,7 +48,7 @@ echo "Done."
 
 echo "Creating service..."
 
-printf '#!/bin/sh /etc/rc.common\n\nUSE_PROCD=1\nSTART=95\nSTOP=01\n\nstart_service() {\n\tprocd_open_instance\n\tprocd_set_param command %s/start.sh\n\tprocd_set_param stdout 1\n\tprocd_set_param stderr 1\n\tprocd_close_instance\n}\n\nstop_service() {\n\t%s/stop.sh\n}' "${parent_path}" "${parent_path}" > "${parent_path}/dashboard"
+printf '#!/bin/sh /etc/rc.common\n\nUSE_PROCD=1\nSTART=95\nSTOP=01\n\nstart_service() {\n\tprocd_open_instance\n\tprocd_set_param command %s/../system/start.sh\n\tprocd_set_param stdout 1\n\tprocd_set_param stderr 1\n\tprocd_close_instance\n}\n\nstop_service() {\n\t%s/../system/stop.sh\n}' "${parent_path}" "${parent_path}" > "${parent_path}/dashboard"
 
 #mv "${parent_path}/dashboard" "/overlay/lxc/${container}/rootfs/etc/init.d"
 mv "${parent_path}/dashboard" "/etc/init.d/dashboard"
@@ -56,8 +56,8 @@ mv "${parent_path}/dashboard" "/etc/init.d/dashboard"
 #chmod 755 "/overlay/lxc/${container}/rootfs/etc/init.d/dashboard"
 chmod 755 "/etc/init.d/dashboard"
 
-chmod 755 "${parent_path}/start.sh"
-chmod 755 "${parent_path}/stop.sh"
+chmod 755 "${parent_path}/../system/start.sh"
+chmod 755 "${parent_path}/../system/stop.sh"
 
 /etc/init.d/dashboard enable
 #/etc/init.d/dashboard start
