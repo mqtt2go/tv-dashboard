@@ -1,0 +1,6 @@
+[Unit]
+Description=MQTT2GO CEC
+After=multi-user.target
+
+[Service]
+ExecStart=/bin/sh -c "/home/pi/cec.sh"

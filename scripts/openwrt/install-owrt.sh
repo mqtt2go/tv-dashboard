@@ -36,7 +36,7 @@ rm -rf /www/*
 
 #cp -R ../build/* /overlay/lxc/tvdashboard/rootfs/www
 
-cp -R ../build/* /www
+cp -R ../../build/* /www
 
 #lxc-attach -n "${container}" -- /etc/init.d/lighttpd reload
 #lxc-attach -n "${container}" -- /etc/init.d/lighttpd enable

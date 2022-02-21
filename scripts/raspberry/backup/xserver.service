@@ -1,0 +1,10 @@
+[Unit]
+Description=My Sample Service
+#After=graphical.target systemd-user-sessions.service
+
+[Service]
+#Type=simple
+ExecStart=/bin/bash /home/pi/xserver.sh
+
+[Install]
+WantedBy=multi-user.target
