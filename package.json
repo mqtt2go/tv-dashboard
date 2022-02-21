@@ -3,17 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "ansi-regex": "^6.0.1",
-    "core-js": "^3.21.1",
-    "fbjs": "^3.0.4",
-    "glob-parent": "^6.0.2",
     "isomorphic-fetch": "^3.0.0",
     "mqtt": "^4.3.6",
-    "node-fetch": "^3.2.0",
-    "paho-mqtt": "^1.1.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "react-js-spatial-navigation": "https://github.com/chwagssd/react-js-spatial-navigation.git",
+    "react-js-spatial-navigation": "https://github.com/martin146/react-js-spatial-navigation.git",
     "react-scripts": "^5.0.0",
     "webpack": "^5.0.0"
   },
