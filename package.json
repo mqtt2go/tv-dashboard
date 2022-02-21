@@ -4,7 +4,10 @@
   "private": true,
   "dependencies": {
     "ansi-regex": "^6.0.1",
+    "core-js": "^3.21.1",
+    "fbjs": "^3.0.4",
     "glob-parent": "^6.0.2",
+    "isomorphic-fetch": "^3.0.0",
     "mqtt": "^4.3.6",
     "node-fetch": "^3.2.0",
     "paho-mqtt": "^1.1.0",
