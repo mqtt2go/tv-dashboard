@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "ansi-regex": "^6.0.1",
+    "glob-parent": "^6.0.2",
     "mqtt": "^4.3.6",
+    "node-fetch": "^3.2.0",
     "paho-mqtt": "^1.1.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
