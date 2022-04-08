@@ -127,6 +127,39 @@ do
             "exit")
                 xdotool key "Escape"
                 ;;
+            "return")
+                xdotool key "alt+Left"
+                ;;
+            "1")
+                xdotool key "1"
+                ;;
+            "2")
+                xdotool key "2"
+                ;;
+            "3")
+                xdotool key "3"
+                ;;
+            "4")
+                xdotool key "4"
+                ;;
+            "5")
+                xdotool key "5"
+                ;;
+            "6")
+                xdotool key "6"
+                ;;
+            "7")
+                xdotool key "7"
+                ;;
+            "8")
+                xdotool key "8"
+                ;;
+            "9")
+                xdotool key "9"
+                ;;
+            "0")
+                xdotool key "0"
+                ;;
          esac
       fi 
    fi
@@ -224,7 +257,7 @@ Restart=on-abort
 [Install]
 WantedBy=multi-user.target' >> $KIOSK
 fi
-sudo systemctl enable xserver.service
+sudo systemctl enable kiosk.service
 sudo apt-get install --no-install-recommends realvnc-vnc-server 
 sudo raspi-config nonint do_vnc 0
 sudo raspi-config nonint do_boot_behaviour B2
