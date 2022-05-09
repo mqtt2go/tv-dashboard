@@ -2,7 +2,10 @@
 
 sleep 10
 
-curl -XPOST -H "Content-type: application/json" -d '{
+urlHostname="http://$(hostname):58000"
+
+
+curl -XPOST -H 'Content-type: application/json' -d '{
    "name":"TV Dashboard",
    "replaceWildcards":true,
    "serviceProtocol":"any",
@@ -13,7 +16,7 @@ curl -XPOST -H "Content-type: application/json" -d '{
          "version":"1.0",
          "provider":"A1 Telekom Austria",
          "product":"TV-Dashboard File Server",
-         "path":"http://fileserver:58000"
+         "path": "'"${urlHostname}"'"
       }
    }
-}' 'http://zeroconf:15051/a1/xploretv/v1/zeroconf'
+}' 'https://zerodiscovery.duckdns.org:15051/a1/xploretv/v1/zeroconf'
