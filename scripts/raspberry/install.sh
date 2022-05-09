@@ -6,22 +6,12 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-
-#launcher="${parent_path}/launcherTV.sh"
 service="${parent_path}/tvdashboard.service"
 
-#add_cronjob () { 
-#    echo "Adding TV Dashboard as a cronjob"
-#    crontab -l > newcron
-#    echo "@reboot sleep 30 && sh ${launcher}" >> newcron
-#    crontab newcron
-#    rm -f newcron
-#}
 
 echo "Installing lighttpd..."
 apt-get update
 apt-get install lighttpd
-#pip3 install requests
 echo "Done."
 
 echo "Updating port..."
@@ -55,23 +45,11 @@ else
 fi
 
 
-#crontab -l | grep "$launcher"
-#if [ $? -eq 0 ]
-#   then
-#       echo "Job already added to crontab"
-#    else
-#       echo "Adding job to crontab..."
-#       touch "${launcher}"
-#       printf '#!/bin/sh\n\nsudo python3 %s/../system/start.py' "${parent_path}" > "${launcher}"
-#       add_cronjob
-#fi
-
 chmod 755 "${parent_path}/../system/start.sh"
 chmod 755 "${parent_path}/../system/stop.sh"
 
 service lighttpd reload
 systemctl start tvdashboard.service
 
-#python3 "${parent_path}/../system/start.py"
 
 echo "Done."

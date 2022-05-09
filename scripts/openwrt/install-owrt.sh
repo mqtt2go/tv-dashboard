@@ -6,16 +6,13 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-#container="tvdashboard"
 
 echo "Installing lighttpd..."
-#lxc-attach -n "${container}" -- opkg update
-#lxc-attach -n "${container}" -- opkg install lighttpd
-#lxc-attach -n "${container}" -- pip3 install requests
+
 
 opkg update
 opkg install lighttpd
-#pip3 install requests
+
 
 echo "Done."
 
