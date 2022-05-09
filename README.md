@@ -61,21 +61,21 @@ When the TV Dashboard is launched, the application is automatically registered t
 ## Service Deregistration
 
 ```
-[POST/DELETE] http://zeroconf:15051/a1/xploretv/v1/zeroconf/TV Dashboard
+[POST/DELETE] https://zerodiscovery.duckdns.org:15051/a1/xploretv/v1/zeroconf/TV Dashboard
 ```
 
 ## Service Response
 
 ```
-[GET] http://zeroconf:15051/a1/xploretv/v1/zeroconf
+[GET] https://zerodiscovery.duckdns.org:15051/a1/xploretv/v1/zeroconf
 ```
 
 ```json
 [
     {...},
     {
-        "name":"TV Dashboard at raspberrypi",
-        "hostName":"raspberrypi.local.",
+        "name":"TV Dashboard at zerodiscovery",
+        "hostName":"zerodiscovery.local.",
         "domainName":"local",
         "addresses":{
         "ipv4":[
