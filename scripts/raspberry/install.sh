@@ -21,7 +21,7 @@ service="${parent_path}/tvdashboard.service"
 echo "Installing lighttpd..."
 apt-get update
 apt-get install lighttpd
-pip3 install requests
+#pip3 install requests
 echo "Done."
 
 echo "Updating port..."
@@ -37,7 +37,7 @@ mkdir /var/www/html
 
 chmod -R 755 /var/www/html
 
-cp -R ../build/* /var/www/html
+cp -R ../../build/* /var/www/html
 echo "Done."
 
 echo "Creating service..."
@@ -65,6 +65,9 @@ fi
 #       printf '#!/bin/sh\n\nsudo python3 %s/../system/start.py' "${parent_path}" > "${launcher}"
 #       add_cronjob
 #fi
+
+chmod 755 "${parent_path}/../system/start.sh"
+chmod 755 "${parent_path}/../system/stop.sh"
 
 service lighttpd reload
 systemctl start tvdashboard.service
